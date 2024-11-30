@@ -25,6 +25,24 @@ export const loginUser = async (formData) => {
   }
 };
 
+export const fetchUserDetails = async (accessToken) => {
+  if (!accessToken) {
+    throw new Error("Access token is missing.");
+  }
+
+  try {
+    const response = await axios.get(`${BASE_URL}/user/current-user`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch user details:", error);
+    throw error;
+  }
+};
+
 export const createProduct = async (formData) => {
   try {
     const response = await axios.post(`${BASE_URL}/product`, formData, {
@@ -94,6 +112,20 @@ export const fetchProducts = async ({
   }
 };
 
+export const fetchSingleProduct = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/product/${id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching product:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
 export const deleteProduct = async (id) => {
   try {
     const response = await axios.delete(`${BASE_URL}/product`, {
@@ -121,24 +153,6 @@ export const deleteCategory = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Failed to delete real estate", error);
-    throw error;
-  }
-};
-
-export const fetchUserDetails = async (accessToken) => {
-  if (!accessToken) {
-    throw new Error("Access token is missing.");
-  }
-
-  try {
-    const response = await axios.get(`${BASE_URL}/user/current-user`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch user details:", error);
     throw error;
   }
 };

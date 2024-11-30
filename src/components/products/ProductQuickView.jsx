@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogHeader,
@@ -8,7 +9,8 @@ import {
 } from "@material-tailwind/react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FiShoppingCart } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import ProductPrice from "./ProductPrice";
+import ImageWithSkeleton from "../UI/ImageWithSkeleton";
 
 const ProductQuickView = ({
   open,
@@ -17,30 +19,12 @@ const ProductQuickView = ({
   description,
   category_name,
   image,
-  price,
-  salePrice,
   id,
 }) => {
   const productDetails = [
     {
       label: "ფასი:",
-      value: (
-        <div className="flex items-center gap-2">
-          <Typography className="font-bold text-sm text-gray-900">
-            {salePrice && salePrice < price ? `${salePrice} ₾` : `${price} ₾`}
-          </Typography>
-          {salePrice && salePrice < price && (
-            <>
-              <Typography className="text-xs text-gray-500 line-through ml-2">
-                {price} ₾
-              </Typography>
-              <div className="text-white bg-red-500 text-xs font-bold px-2 py-1 rounded ml-2">
-                -{Math.round(((price - salePrice) / price) * 100)}%
-              </div>
-            </>
-          )}
-        </div>
-      ),
+      value: <ProductPrice />,
     },
     {
       label: "კატეგორია:",
@@ -68,11 +52,12 @@ const ProductQuickView = ({
       </DialogHeader>
 
       <DialogBody className="h-full flex flex-col lg:flex-row gap-4 justify-between">
-        <figure className="mx-auto lg:mx-0 h-[300px] lg:w-1/2">
-          <img
-            className="rounded-lg object-cover object-center h-full"
+        <figure className="mx-auto lg:mx-0 min-h-[300px] lg:w-1/2">
+          <ImageWithSkeleton
             src={image}
-            alt="Product"
+            alt={title}
+            className="rounded-lg"
+            skeletonClassName="h-full rounded-lg"
           />
         </figure>
         <div className="lg:full flex flex-col justify-between gap-4">

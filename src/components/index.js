@@ -12,3 +12,5 @@ export { default as ProductList } from "./products/ProductList";
 export { default as CategoryList } from "./categories/CategoryList";
 export { default as ErrorMessage } from "./auth/ErrorMessage";
 export { default as FormField } from "./auth/FormFIeld";
+export { default as PriceSection } from "./products/PriceSection";
+export { default as ImageWithSkeleton } from "./UI/ImageWithSkeleton";

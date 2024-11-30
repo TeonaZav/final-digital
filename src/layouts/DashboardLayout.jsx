@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
 import {
   Card,
   Typography,
@@ -9,8 +10,6 @@ import {
 
 import { MdClose } from "react-icons/md";
 import { Header } from "./";
-import { useState } from "react";
-import AdminMenuList from "../components/admin/AdminMenuList";
 
 const DashboardLayout = () => {
   const [open, setOpen] = useState(false);
@@ -34,7 +33,7 @@ const DashboardLayout = () => {
             <MdClose />
           </IconButton>
         </div>
-        <AdminMenuList />
+
         <Button className="mt-3 ml-5" size="sm">
           Documentation
         </Button>
@@ -46,7 +45,6 @@ const DashboardLayout = () => {
               მენიუ
             </Typography>
           </div>
-          <AdminMenuList />
         </Card>
         <main className="flex-1 p-6 overflow-auto">
           <Outlet />

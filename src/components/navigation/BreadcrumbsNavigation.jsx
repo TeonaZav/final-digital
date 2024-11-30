@@ -1,9 +1,14 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Breadcrumbs } from "@material-tailwind/react";
 import { PiGreaterThan } from "react-icons/pi";
+import { clearFilters } from "../../features/products/productSlice";
 
 const BreadcrumbsNavigation = () => {
   const location = useLocation();
+  const [_, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const filters = useSelector((state) => state.products.filters);
 
   const breadcrumbPaths = location.pathname
     .split("/")
@@ -13,8 +18,13 @@ const BreadcrumbsNavigation = () => {
       return { name: decodeURIComponent(path), to };
     });
 
-  const pathTranslations = {
-    products: "პროდუქტები",
+  if (breadcrumbPaths.length === 0 || breadcrumbPaths[0].name !== "products") {
+    breadcrumbPaths.unshift({ name: "products", to: "/products" });
+  }
+
+  const clearParams = () => {
+    setSearchParams({});
+    dispatch(clearFilters());
   };
 
   return (
@@ -22,22 +32,17 @@ const BreadcrumbsNavigation = () => {
       separator={<PiGreaterThan className="text-xs" />}
       className="mb-4 bg-transparent"
     >
-      <Link to="/" className="text-xs opacity-60 hover:opacity-100">
-        მთავარი
+      <Link
+        to="/products"
+        className="text-xs opacity-60 hover:opacity-100"
+        onClick={clearParams}
+      >
+        პროდუქტები
       </Link>
-      {breadcrumbPaths.map((breadcrumb, index) => (
-        <Link
-          key={index}
-          to={breadcrumb.to}
-          className={`text-xs ${
-            index === breadcrumbPaths.length - 1
-              ? "font-semibold"
-              : "opacity-60 hover:opacity-100"
-          }`}
-        >
-          {pathTranslations[breadcrumb.name] || breadcrumb.name}
-        </Link>
-      ))}
+
+      {filters.categoryName && (
+        <span className="text-xs font-semibold">{filters.categoryName}</span>
+      )}
     </Breadcrumbs>
   );
 };

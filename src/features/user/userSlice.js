@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const getUserFromLocalStorage = () => {
-  return JSON.parse(localStorage.getItem("user")) || null;
+  const loginData = JSON.parse(localStorage.getItem("loginData")) || null;
+  const userDetails = JSON.parse(localStorage.getItem("userDetails")) || null;
+  return loginData ? { ...loginData, userDetails } : null;
 };
 
 const initialState = {
@@ -14,21 +16,38 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     loginUser: (state, action) => {
-      console.log(action);
-      const user = {
-        ...action.payload,
-        token: action.payload.access_token,
+      const loginData = {
+        access_token: action.payload.access_token,
+        refresh_token: action.payload.refreshToken,
       };
-      state.user = user;
-      localStorage.setItem("user", JSON.stringify(user));
+
+  
+      state.user = {
+        ...state.user,
+        ...loginData,
+      };
+
+    
+      localStorage.setItem("loginData", JSON.stringify(loginData));
+
+   
+      if (action.payload.userDetails) {
+        state.user.userDetails = action.payload.userDetails;
+        localStorage.setItem(
+          "userDetails",
+          JSON.stringify(action.payload.userDetails)
+        );
+      }
     },
     logoutUser: (state) => {
       state.user = null;
-      localStorage.removeItem("user");
+      localStorage.removeItem("loginData");
+      localStorage.removeItem("userDetails");
       toast.success("Logged out successfully");
     },
   },
 });
+
 export const { loginUser, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

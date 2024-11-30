@@ -1,17 +1,30 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "../services/api";
+import { setProducts, setTotalPages } from "../features/products/productSlice";
 
 export const useGetProducts = (filters) => {
+  const dispatch = useDispatch();
+
   const { data, error, isFetching } = useQuery({
     queryKey: ["products", filters],
     queryFn: () => fetchProducts(filters),
-    keepPreviousData: true,
+    suspense: true,
   });
 
-  const products = data?.products || [];
-  console.log(products);
-  const total = data?.total || 0;
-  const totalPages = Math.ceil(total / filters.pageSize);
+  useEffect(() => {
+    if (data?.total) {
+      const totalPages = Math.ceil(data.total / filters.pageSize);
+      dispatch(setProducts(data.products));
+      dispatch(setTotalPages(totalPages));
+    }
+  }, [data, filters.pageSize, dispatch]);
 
-  return { products, totalPages, error, isFetching };
+  return {
+    products: data?.products || [],
+    totalPages: data?.total ? Math.ceil(data.total / filters.pageSize) : 1,
+    error,
+    isFetching,
+  };
 };

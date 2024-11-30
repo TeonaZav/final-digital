@@ -1,15 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { createUser } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 export const useCreateUser = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate: addUser, isLoading: isCreating } = useMutation({
     mutationFn: createUser,
     onSuccess: () => {
       toast.success("User successfully created");
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     },
     onError: (err) => {
       const errorMessage =

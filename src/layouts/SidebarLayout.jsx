@@ -1,6 +1,7 @@
 import { useState } from "react";
-import CategoryList from "../components/categories/CategoryList";
-import Header from "../components/navigation/Header";
+import { Outlet } from "react-router-dom";
+import { Header } from "./";
+import { SidebarMenu, BreadcrumbsNavigation, Filters } from "../components";
 
 const SidebarLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -8,22 +9,26 @@ const SidebarLayout = () => {
   return (
     <div className="">
       <Header />
-      <div className="container max-w-[1240px] mx-auto flex flex-col lg:flex-row">
+      <div className="container max-w-[1240px] mx-auto flex flex-col lg:grid lg:grid-cols-12 lg:gap-4 p-4">
         <aside
           id="default-sidebar"
-          className={`hidden lg:block z-40 w-64 min-h-[80vh] bg-gray-50 transition-all p-4`}
+          className={`hidden xl:block lg:col-span-3 z-40 transition-all`}
           aria-label="Sidebar"
         >
-          <div className="h-full px-3 py-4 overflow-y-auto"></div>
+          <div className="h-full px-3 py-4 overflow-y-auto">
+            <SidebarMenu />
+            <Filters />
+          </div>
         </aside>
-        <main className="flex-1 p-4">
-          <div className="border-2 border-dashed border-gray-200 rounded-lg">
-            <CategoryList />
+
+        <main className="col-span-12 xl:col-span-9 flex-1">
+          <BreadcrumbsNavigation />
+          <div className="flex-1  border-gray-200 rounded-lg pl-4">
+            <Outlet />
           </div>
         </main>
       </div>
 
-      {/* Toggle Button */}
       <button
         onClick={() => setSidebarOpen(!isSidebarOpen)}
         aria-controls="default-sidebar"

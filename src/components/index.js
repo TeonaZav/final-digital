@@ -7,3 +7,6 @@ export { default as BreadcrumbsNavigation } from "./navigation/BreadcrumbsNaviga
 export { default as ProductQuickView } from "./products/ProductQuickView";
 export { default as ProductCard } from "./products/ProductCard";
 export { default as ProductPagination } from "./products/ProductPagination";
+export { default as Filters } from "./products/Filters";
+export { default as ProductList } from "./products/ProductList";
+export { default as CategoryList } from "./categories/CategoryList";

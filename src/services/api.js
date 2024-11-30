@@ -66,12 +66,31 @@ export const fetchCategories = async () => {
   }
 };
 
-export const fetchProducts = async () => {
+export const fetchProducts = async ({
+  page = 1,
+  pageSize = 10,
+  categoryName,
+  minPrice,
+  maxPrice,
+  productName,
+  onlySales,
+}) => {
   try {
-    const response = await axios.get(`${BASE_URL}/product`);
+    const params = {
+      page,
+      pageSize,
+      ...(categoryName && { categoryName }),
+      ...(minPrice && { minPrice }),
+      ...(maxPrice && { maxPrice }),
+      ...(productName && { productName }),
+      ...(onlySales !== undefined && { onlySales }),
+    };
+
+    const response = await axios.get(`${BASE_URL}/product`, { params });
     return response.data;
   } catch (error) {
-    console.error("Failed to fetch categories", error);
+    console.error("Failed to fetch products:", error);
+    throw error;
   }
 };
 

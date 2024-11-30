@@ -1,9 +1,11 @@
-import React from 'react'
+import CategoryList from "../../components/categories/CategoryCrid";
 
 const Landing = () => {
   return (
-    <div>Landing</div>
-  )
-}
+    <div>
+      <CategoryList />
+    </div>
+  );
+};
 
-export default Landing
+export default Landing;

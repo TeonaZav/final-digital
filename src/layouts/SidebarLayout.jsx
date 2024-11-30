@@ -21,9 +21,9 @@ const SidebarLayout = () => {
           </div>
         </aside>
 
-        <main className="col-span-12 xl:col-span-9 flex-1">
+        <main className="col-span-12 xl:col-span-9 flex-1 min-h-[50vh]">
           <BreadcrumbsNavigation />
-          <div className="flex-1  border-gray-200 rounded-lg pl-4">
+          <div className="flex-1 border-gray-200 rounded-lg pl-4">
             <Outlet />
           </div>
         </main>

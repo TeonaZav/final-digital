@@ -54,7 +54,7 @@ const Filters = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 border-r mt-4">
+    <div className="flex flex-col gap-4  mt-4">
       <button
         onClick={toggleFilters}
         className="flex items-center text-xs font-bold"
@@ -67,7 +67,7 @@ const Filters = () => {
         )}
       </button>
       <div
-        className={`border-b mb-4 flex flex-col gap-4 rounded-lg py-4 overflow-hidden transition-all duration-300 ${
+        className={`border-b mb-4 flex flex-col gap-4 rounded-lg  overflow-hidden transition-all duration-300 ${
           isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >

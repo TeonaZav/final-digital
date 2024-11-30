@@ -34,7 +34,7 @@ const ProductPagination = ({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row items-center gap-4 lg:justify-between">
+    <div className="flex flex-col md:flex-row items-center gap-4 lg:justify-between">
       <div className="flex items-center gap-4">
         <Button
           variant="text"

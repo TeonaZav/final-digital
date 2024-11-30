@@ -10,3 +10,5 @@ export { default as ProductPagination } from "./products/ProductPagination";
 export { default as Filters } from "./products/Filters";
 export { default as ProductList } from "./products/ProductList";
 export { default as CategoryList } from "./categories/CategoryList";
+export { default as ErrorMessage } from "./auth/ErrorMessage";
+export { default as FormField } from "./auth/FormFIeld";

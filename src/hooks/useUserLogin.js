@@ -30,7 +30,7 @@ export const useUserLogin = () => {
       try {
         const userDetails = await fetchUserDetails(loginData.access_token);
 
-        localStorage.setItem("userDetails", JSON.stringify(userDetails));
+        // localStorage.setItem("userDetails", JSON.stringify(userDetails));
         dispatch(
           loginUserAction({
             ...loginData,

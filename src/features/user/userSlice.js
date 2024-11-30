@@ -18,7 +18,7 @@ const userSlice = createSlice({
     loginUser: (state, action) => {
       const loginData = {
         access_token: action.payload.access_token,
-        refresh_token: action.payload.refreshToken,
+        refresh_token: action.payload.refresh_token,
       };
 
   
@@ -33,10 +33,7 @@ const userSlice = createSlice({
    
       if (action.payload.userDetails) {
         state.user.userDetails = action.payload.userDetails;
-        localStorage.setItem(
-          "userDetails",
-          JSON.stringify(action.payload.userDetails)
-        );
+
       }
     },
     logoutUser: (state) => {

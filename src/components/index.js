@@ -6,3 +6,4 @@ export { default as SidebarMenu } from "./navigation/SidebarMenu";
 export { default as BreadcrumbsNavigation } from "./navigation/BreadcrumbsNavigation";
 export { default as ProductQuickView } from "./products/ProductQuickView";
 export { default as ProductCard } from "./products/ProductCard";
+export { default as ProductPagination } from "./products/ProductPagination";

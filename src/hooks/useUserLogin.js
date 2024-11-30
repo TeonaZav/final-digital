@@ -39,7 +39,7 @@ export const useUserLogin = () => {
         );
 
         toast.success("Logged in successfully");
-        navigate("/");
+        navigate("/products");
       } catch (error) {
         console.error("Failed to fetch user details:", error);
         toast.error("Failed to fetch user details. Please try again.");

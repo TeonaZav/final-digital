@@ -19,7 +19,7 @@ const Login = () => {
   return (
     <Card color="transparent" shadow={false} className="max-w-lg mx-auto">
       <Typography variant="h4" color="blue-gray" className="text-center">
-        Login
+        ავტორიზაცია
       </Typography>
 
       <FormProvider {...methods}>
@@ -29,13 +29,13 @@ const Login = () => {
         >
           <FormField
             name="email"
-            label="User Email"
+            label="ელ.ფოსტა"
             placeholder="user@mail.com"
             type="email"
           />
           <FormField
             name="password"
-            label="Password"
+            label="პაროლი"
             placeholder="********"
             type="password"
           />
@@ -51,12 +51,12 @@ const Login = () => {
       </FormProvider>
 
       <Typography color="gray" className="mt-4 text-center text-sm font-normal">
-        Not a member yet?{" "}
+        არ გაქვთ ანგარიში?{" "}
         <Link
           to="/register"
           className="font-medium text-blue-500 hover:underline"
         >
-          Register
+          რეგისტრაცია
         </Link>
       </Typography>
     </Card>

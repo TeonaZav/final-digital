@@ -21,7 +21,7 @@ const Register = () => {
   return (
     <Card color="transparent" shadow={false} className="max-w-lg mx-auto">
       <Typography variant="h4" color="blue-gray" className="text-center">
-        Sign Up
+        რეგისტრაცია
       </Typography>
 
       <FormProvider {...methods}>
@@ -31,39 +31,35 @@ const Register = () => {
         >
           <FormField
             name="first_name"
-            label="First Name"
+            label="სახელი"
             placeholder="First Name"
           />
-          <FormField
-            name="last_name"
-            label="Last Name"
-            placeholder="Last Name"
-          />
+          <FormField name="last_name" label="გვარი" placeholder="Last Name" />
           <FormField
             name="email"
-            label="Email"
+            label="ელ. ფოსტა"
             placeholder="name@mail.com"
             type="email"
           />
           <FormField
             name="password"
-            label="Password"
+            label="პაროლი"
             placeholder="********"
             type="password"
           />
           <FormField
             name="phone_number"
-            label="Phone Number"
+            label="ტელეფონის ნომერი"
             placeholder="Phone Number"
           />
 
           <Button type="submit" fullWidth disabled={isCreating}>
-            {isCreating ? "Creating..." : "Create User"}
+            {isCreating ? "იტვირთება..." : "ანგარიშის შექმნა"}
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">
-            Already have an account?{" "}
+            უკვე გაქვთ ანგარიში?{" "}
             <Link to="/login" className="font-medium text-gray-900">
-              Sign In
+              შესვლა
             </Link>
           </Typography>
         </form>

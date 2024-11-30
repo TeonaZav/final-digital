@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
-import Header from "../components/navigation/Header";
+import { Header, Footer } from "./";
 
 const HeaderFooterLayout = () => {
   return (
     <div>
       <Header />
-      <main>
+      <main className="py-20">
         <Outlet />
       </main>
-      <footer>Footer</footer>
+      <Footer />
     </div>
   );
 };

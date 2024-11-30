@@ -1,21 +1,14 @@
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import {
   Card,
   Typography,
-  List,
-  ListItem,
-  ListItemPrefix,
-  ListItemSuffix,
-  Chip,
   Drawer,
   Button,
   IconButton,
 } from "@material-tailwind/react";
 
-import { ShoppingBagIcon } from "@heroicons/react/24/solid";
-import { TbCategory } from "react-icons/tb";
 import { MdClose } from "react-icons/md";
-import Header from "../components/navigation/Header";
+import { Header } from "./";
 import { useState } from "react";
 import AdminMenuList from "../components/admin/AdminMenuList";
 

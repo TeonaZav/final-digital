@@ -13,6 +13,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import ProductPrice from "./ProductPrice";
 import ImageWithSkeleton from "../UI/ImageWithSkeleton";
 import { useAddProductToCart } from "../../hooks/useAddProductToCart";
+import { addItem } from "../../features/cart/cartSlice";
 
 const ProductQuickView = ({ open, onClose, product }) => {
   const productDetails = [
@@ -36,9 +37,7 @@ const ProductQuickView = ({ open, onClose, product }) => {
 
   const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
 
-  const handleAdd = (e) => {
-    e.preventDefault();
-
+  const handleAdd = () => {
     if (accessToken) {
       addProduct(product);
     } else {

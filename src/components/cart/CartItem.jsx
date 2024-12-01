@@ -7,9 +7,11 @@ import {
   useDeleteCartItem,
 } from "../../hooks/useDeleteCartItem";
 import { useAddProductToCart } from "../../hooks/useAddProductToCart";
+import { addItem } from "../../features/cart/cartSlice";
 
 const CartItem = ({ cartItem }) => {
   const { title, price, salePrice, image, count } = cartItem;
+
   const accessToken = useSelector(
     (state) => state.userState?.user?.access_token
   );
@@ -22,10 +24,18 @@ const CartItem = ({ cartItem }) => {
   );
   const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
 
-  const handleAdd = (e) => {
-    e.preventDefault();
+  const handleAdd = () => {
     if (accessToken) {
       addProduct({ ...cartItem, id: cartItem.product_id });
+    } else {
+      dispatch(
+        addItem({
+          ...cartItem,
+          id: cartItem.product_id,
+          product_id: cartItem.product_id,
+          count: 1,
+        })
+      );
     }
   };
 

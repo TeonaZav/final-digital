@@ -7,6 +7,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import { ProductQuickView, ImageWithSkeleton } from "./..";
 
 import { useAddProductToCart } from "../../hooks/useAddProductToCart";
+import { addItem } from "../../features/cart/cartSlice";
 
 const ProductCard = (product) => {
   const [open, setOpen] = useState(false);
@@ -23,12 +24,11 @@ const ProductCard = (product) => {
 
   const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
 
-  const handleAdd = (e) => {
-    e.preventDefault();
+  const handleAdd = () => {
     if (accessToken) {
       addProduct(product);
     } else {
-      dispatch(addItem({ ...product,  count: 1 }));
+      dispatch(addItem({ ...product, count: 1 }));
     }
   };
 

@@ -5,6 +5,7 @@ import { LuTruck } from "react-icons/lu";
 import ProductPrice from "./ProductPrice";
 
 import { useAddProductToCart } from "../../hooks/useAddProductToCart";
+import { addItem } from "../../features/cart/cartSlice";
 
 const PriceSection = ({ product }) => {
   const { price, salePrice } = product;
@@ -15,8 +16,7 @@ const PriceSection = ({ product }) => {
 
   const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
 
-  const handleAdd = (e) => {
-    e.preventDefault();
+  const handleAdd = () => {
     if (accessToken) {
       addProduct(product);
     } else {

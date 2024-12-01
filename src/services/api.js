@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000";
 const accessToken = "";
+const BASE_URL = "http://localhost:3000";
 
 export const createUser = async (formData) => {
   try {
@@ -155,4 +155,26 @@ export const deleteCategory = async (id) => {
     console.error("Failed to delete real estate", error);
     throw error;
   }
+};
+
+export const addProductToCart = async (product, accessToken) => {
+  const response = await axios.post(
+    `${BASE_URL}/cart`,
+    { product_id: product.id, count: product.amount },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const fetchCartFromAPI = async (accessToken) => {
+  const response = await axios.get(`${BASE_URL}/cart`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
 };

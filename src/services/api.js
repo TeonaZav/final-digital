@@ -157,10 +157,10 @@ export const deleteCategory = async (id) => {
   }
 };
 
-export const addProductToCart = async (product, accessToken) => {
+export const addProductToCart = async (id, accessToken) => {
   const response = await axios.post(
     `${BASE_URL}/cart`,
-    { product_id: product.id, count: product.amount },
+    { product_id: id },
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -177,4 +177,36 @@ export const fetchCartFromAPI = async (accessToken) => {
     },
   });
   return response.data;
+};
+
+export const deleteCartItem = async (id, accessToken) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/cart/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("დაფიქსირდა შეცდომა", error);
+    throw error;
+  }
+};
+
+export const deleteCart = async (accessToken) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/cart/clear`,
+      {}, 
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data; 
+  } catch (error) {
+    console.error("დაფიქსირდა შეცდომა", error);
+    throw error;
+  }
 };

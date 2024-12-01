@@ -17,3 +17,4 @@ export { default as ImageWithSkeleton } from "./UI/ImageWithSkeleton";
 export { default as CartItem } from "./cart/CartItem";
 export { default as CartItemList } from "./cart/CartItemList";
 export { default as CartTotals } from "./cart/CartTotals";
+export { default as Heading } from "./UI/Heading";

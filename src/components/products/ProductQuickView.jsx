@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Dialog,
   DialogHeader,
@@ -8,7 +10,10 @@ import {
 } from "@material-tailwind/react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FiShoppingCart } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import ProductPrice from "./ProductPrice";
+import ImageWithSkeleton from "../UI/ImageWithSkeleton";
+import { addItem } from "../../features/cart/cartSlice";
+import { useAddProductToCart } from "../../hooks/useAddProductToCart";
 
 const ProductQuickView = ({
   open,
@@ -17,30 +22,12 @@ const ProductQuickView = ({
   description,
   category_name,
   image,
-  price,
-  salePrice,
   id,
 }) => {
   const productDetails = [
     {
       label: "ფასი:",
-      value: (
-        <div className="flex items-center gap-2">
-          <Typography className="font-bold text-sm text-gray-900">
-            {salePrice && salePrice < price ? `${salePrice} ₾` : `${price} ₾`}
-          </Typography>
-          {salePrice && salePrice < price && (
-            <>
-              <Typography className="text-xs text-gray-500 line-through ml-2">
-                {price} ₾
-              </Typography>
-              <div className="text-white bg-red-500 text-xs font-bold px-2 py-1 rounded ml-2">
-                -{Math.round(((price - salePrice) / price) * 100)}%
-              </div>
-            </>
-          )}
-        </div>
-      ),
+      value: <ProductPrice />,
     },
     {
       label: "კატეგორია:",
@@ -51,7 +38,21 @@ const ProductQuickView = ({
       value: title,
     },
   ];
+  const accessToken = useSelector(
+    (state) => state.userState?.user?.access_token
+  );
+  console.log(accessToken);
+  const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
+  const dispatch = useDispatch();
 
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    addProduct(product.id, {
+      onSuccess: () => {
+        dispatch(addItem({ ...product, count: 1 }));
+      },
+    });
+  };
   return (
     <Dialog
       open={open}
@@ -68,11 +69,12 @@ const ProductQuickView = ({
       </DialogHeader>
 
       <DialogBody className="h-full flex flex-col lg:flex-row gap-4 justify-between">
-        <figure className="mx-auto lg:mx-0 h-[300px] lg:w-1/2">
-          <img
-            className="rounded-lg object-cover object-center h-full"
+        <figure className="mx-auto lg:mx-0 min-h-[300px] lg:w-1/2 border rounded-lg">
+          <ImageWithSkeleton
             src={image}
-            alt="Product"
+            alt={title}
+            className="rounded-lg"
+            skeletonClassName="h-full rounded-lg"
           />
         </figure>
         <div className="lg:full flex flex-col justify-between gap-4">
@@ -94,16 +96,15 @@ const ProductQuickView = ({
           <div className="w-full flex flex-wrap justify-between gap-4">
             <Button
               className="p-4 flex items-center justify-center w-full lg:w-[47%]"
-              onClick={(e) => e.preventDefault()}
+              onClick={handleAddToCart}
               variant="gradient"
+              loading={isAdding}
             >
               <FiShoppingCart className="mr-2" />
               დამატება
             </Button>
-            <Button className="p-4 bg-indigo-600 w-full lg:w-[47%]">
-              ყიდვა
-            </Button>
-            <Link to={`/products/${id}`} className="w-full">
+
+            <Link to={`/products/${id}`}>
               <Button className="p-4 bg-gray-400 w-full text-gray-900">
                 სრულად ნახვა
               </Button>

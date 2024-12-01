@@ -5,7 +5,7 @@ const HeaderFooterLayout = () => {
   return (
     <div className="flex flex-col h-full">
       <Header />
-      <main className="py-20 flex-1">
+      <main className="container max-w-[1240px] mx-auto  px-4 py-20 flex-1">
         <Outlet />
       </main>
       <Footer />

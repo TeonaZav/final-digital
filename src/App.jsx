@@ -33,15 +33,12 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="*" element={<Error />} />
           </Route>
 
           <Route element={<SidebarLayout />}>
             <Route path="/products" element={<Products />} />
-          </Route>
-
-          <Route element={<HeaderFooterLayout />}>
-            <Route path="/products/:id" element={<ProductDetails />} />
           </Route>
         </Routes>
       </Suspense>

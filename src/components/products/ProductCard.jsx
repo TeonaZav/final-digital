@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button, Typography } from "@material-tailwind/react";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoEyeOutline } from "react-icons/io5";
-import { ProductQuickView } from "./..";
+import { ProductQuickView, ImageWithSkeleton } from "./..";
 
 const ProductCard = (props) => {
   const [open, setOpen] = useState(false);
@@ -10,28 +11,37 @@ const ProductCard = (props) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { title, image, price, salePrice } = props;
+  const { id, title, price, salePrice, image } = props;
 
   return (
     <article className="relative min-w-[160px] min-h-72 rounded-lg transition-transform duration-300 hover:scale-105 group">
-      <figure className="relative flex justify-center items-center w-full h-[180px] border rounded-lg">
-        <img
-          src={image}
-          alt={title}
-          className="object-contain w-full h-full rounded-lg"
-        />
+      <Link
+        to={`/products/${id}`}
+        onClick={() => console.log(`/products/${title}`)}
+      >
+        <figure className="relative flex justify-center items-center w-full h-[180px] border rounded-lg">
+          <ImageWithSkeleton
+            src={image}
+            alt={title}
+            className="rounded-lg"
+            skeletonClassName="h-full rounded-lg"
+          />
 
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-white opacity-0 translate-y-full transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 w-full">
-          <Button
-            className="w-full flex items-center text-gray-600 hover:bg-white hover:text-gray-800 bg-transparent"
-            onClick={handleOpen}
-            variant="text"
-          >
-            <IoEyeOutline className="mr-2" />
-            სწრაფი ნახვა
-          </Button>
-        </div>
-      </figure>
+          <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-white opacity-0 translate-y-full transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 w-full">
+            <Button
+              className="w-full flex items-center text-gray-600 hover:bg-white hover:text-gray-800 bg-transparent"
+              onClick={(e) => {
+                e.preventDefault();
+                handleOpen();
+              }}
+              variant="text"
+            >
+              <IoEyeOutline className="mr-2" />
+              სწრაფი ნახვა
+            </Button>
+          </div>
+        </figure>
+      </Link>
 
       <div className="p-3 bg-white flex flex-col justify-between">
         <div className="flex items-center">

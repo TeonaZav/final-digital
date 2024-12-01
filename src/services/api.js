@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000";
 const accessToken = "";
+const BASE_URL = "http://localhost:3000";
 
 export const createUser = async (formData) => {
   try {
@@ -21,6 +21,24 @@ export const loginUser = async (formData) => {
     return response.data;
   } catch (error) {
     console.error("Failed to login user:", error);
+    throw error;
+  }
+};
+
+export const fetchUserDetails = async (accessToken) => {
+  if (!accessToken) {
+    throw new Error("Access token is missing.");
+  }
+
+  try {
+    const response = await axios.get(`${BASE_URL}/user/current-user`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch user details:", error);
     throw error;
   }
 };
@@ -94,6 +112,20 @@ export const fetchProducts = async ({
   }
 };
 
+export const fetchSingleProduct = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/product/${id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching product:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
 export const deleteProduct = async (id) => {
   try {
     const response = await axios.delete(`${BASE_URL}/product`, {
@@ -125,20 +157,24 @@ export const deleteCategory = async (id) => {
   }
 };
 
-export const fetchUserDetails = async (accessToken) => {
-  if (!accessToken) {
-    throw new Error("Access token is missing.");
-  }
-
-  try {
-    const response = await axios.get(`${BASE_URL}/user/current-user`, {
+export const addProductToCart = async (product, accessToken) => {
+  const response = await axios.post(
+    `${BASE_URL}/cart`,
+    { product_id: product.id, count: product.amount },
+    {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch user details:", error);
-    throw error;
-  }
+    }
+  );
+  return response.data;
+};
+
+export const fetchCartFromAPI = async (accessToken) => {
+  const response = await axios.get(`${BASE_URL}/cart`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
 };

@@ -25,15 +25,23 @@ const cartSlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       const product = action.payload;
-      console.log(product);
 
       const productId = product.product_id || product.id;
+      const existingItem = state.cartItems.find(
+        (item) => item.product_id === productId
+      );
 
-      state.cartItems.push({
-        ...product,
-        product_id: productId,
-        count: product.count || 1,
-      });
+      if (existingItem) {
+        existingItem.count += product.count || 1;
+        toast.info("პროდუქტის რაოდენობა განახლდა კალათაში");
+      } else {
+        state.cartItems.push({
+          ...product,
+          product_id: productId,
+          count: product.count || 1,
+        });
+        toast.success("პროდუქტი დაემატა კალათაში");
+      }
 
       state.numItemsInCart = state.cartItems.reduce(
         (total, item) => total + item.count,
@@ -53,18 +61,32 @@ const cartSlice = createSlice({
 
       cartSlice.caseReducers.calculateTotals(state);
       saveCartToLocalStorage(state);
-
-      toast.success("პროდუქტი დაემატა კალათაში");
     },
     removeItem: (state, action) => {
       const { product_id } = action.payload;
-      console.log(product_id, state.cartItems);
-      const product = state.cartItems.find((i) => i.product_id === product_id);
-      state.cartItems = state.cartItems.filter(
-        (i) => i.product_id !== product_id
+
+      console.log("Product ID to remove:", product_id);
+      const existingItem = state.cartItems.find(
+        (i) => i.product_id === product_id
       );
-      state.numItemsInCart -= product.count;
-      state.cartTotal -= product.price * product.count;
+
+      if (existingItem) {
+        if (existingItem.count > 1) {
+          existingItem.count -= 1;
+          state.numItemsInCart -= 1;
+          state.cartTotal -= existingItem.salePrice || existingItem.price;
+        } else {
+          state.cartItems = state.cartItems.filter(
+            (i) => i.product_id !== product_id
+          );
+          state.numItemsInCart -= 1;
+          state.cartTotal -= existingItem.salePrice || existingItem.price;
+        }
+
+        toast.success("პროდუქტი წაიშალა კალათიდან");
+      } else {
+        toast.error("პროდუქტი არ არის კალათაში");
+      }
 
       cartSlice.caseReducers.calculateTotals(state);
       saveCartToLocalStorage(state);

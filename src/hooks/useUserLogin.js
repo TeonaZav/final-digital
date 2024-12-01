@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginUser as loginUserAPI, fetchUserDetails } from "../services/api";
 import { loginUser as loginUserAction } from "../features/user/userSlice";
-import { syncCartAfterLogin } from "../utils/cartUtils";
 
 export const useUserLogin = () => {
   const dispatch = useDispatch();
@@ -37,7 +36,7 @@ export const useUserLogin = () => {
             userDetails,
           })
         );
-        await syncCartAfterLogin(dispatch, loginData.access_token);
+
         toast.success("Logged in successfully");
         navigate("/products");
       } catch (error) {

@@ -55,7 +55,7 @@ const ProductDetails = () => {
             </li>
           ))}
         </ul>
-        <PriceSection {...product} />
+        <PriceSection product={product} />
       </div>
     </section>
   );

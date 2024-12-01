@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Dialog,
   DialogHeader,
@@ -11,6 +12,8 @@ import { IoCloseSharp } from "react-icons/io5";
 import { FiShoppingCart } from "react-icons/fi";
 import ProductPrice from "./ProductPrice";
 import ImageWithSkeleton from "../UI/ImageWithSkeleton";
+import { addItem } from "../../features/cart/cartSlice";
+import { useAddProductToCart } from "../../hooks/useAddProductToCart";
 
 const ProductQuickView = ({
   open,
@@ -35,7 +38,21 @@ const ProductQuickView = ({
       value: title,
     },
   ];
+  const accessToken = useSelector(
+    (state) => state.userState?.user?.access_token
+  );
+  console.log(accessToken);
+  const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
+  const dispatch = useDispatch();
 
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    addProduct(product.id, {
+      onSuccess: () => {
+        dispatch(addItem({ ...product, count: 1 }));
+      },
+    });
+  };
   return (
     <Dialog
       open={open}
@@ -52,7 +69,7 @@ const ProductQuickView = ({
       </DialogHeader>
 
       <DialogBody className="h-full flex flex-col lg:flex-row gap-4 justify-between">
-        <figure className="mx-auto lg:mx-0 min-h-[300px] lg:w-1/2">
+        <figure className="mx-auto lg:mx-0 min-h-[300px] lg:w-1/2 border rounded-lg">
           <ImageWithSkeleton
             src={image}
             alt={title}
@@ -79,16 +96,15 @@ const ProductQuickView = ({
           <div className="w-full flex flex-wrap justify-between gap-4">
             <Button
               className="p-4 flex items-center justify-center w-full lg:w-[47%]"
-              onClick={(e) => e.preventDefault()}
+              onClick={handleAddToCart}
               variant="gradient"
+              loading={isAdding}
             >
               <FiShoppingCart className="mr-2" />
               დამატება
             </Button>
-            <Button className="p-4 bg-indigo-600 w-full lg:w-[47%]">
-              ყიდვა
-            </Button>
-            <Link to={`/products/${id}`} className="w-full">
+
+            <Link to={`/products/${id}`}>
               <Button className="p-4 bg-gray-400 w-full text-gray-900">
                 სრულად ნახვა
               </Button>

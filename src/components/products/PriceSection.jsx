@@ -1,9 +1,28 @@
 import { Button } from "@material-tailwind/react";
+import { useDispatch, useSelector } from "react-redux";
 import { FiShoppingCart } from "react-icons/fi";
 import { LuTruck } from "react-icons/lu";
 import ProductPrice from "./ProductPrice";
+import { addItem } from "../../features/cart/cartSlice";
+import { useAddProductToCart } from "../../hooks/useAddProductToCart";
 
-const PriceSection = ({ price, salePrice }) => {
+const PriceSection = ({ product }) => {
+  const { price, salePrice } = product;
+  const dispatch = useDispatch();
+  const accessToken = useSelector(
+    (state) => state.userState?.user?.access_token
+  );
+
+  const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    addProduct(product.id, {
+      onSuccess: () => {
+        dispatch(addItem({ ...product, count: 1 }));
+      },
+    });
+  };
   return (
     <div className="p-6 bg-white rounded-lg border border-gray-300 w-full h-max flex flex-col justify-between gap-4">
       <ProductPrice price={price} salePrice={salePrice} className="text-xl" />
@@ -12,17 +31,15 @@ const PriceSection = ({ price, salePrice }) => {
         მასშტაბით
       </div>
 
-      <div className="w-full flex flex-wrap justify-between gap-4">
-        <Button
-          className="p-4 flex items-center justify-center w-full lg:w-[47%]"
-          onClick={(e) => e.preventDefault()}
-          variant="gradient"
-        >
-          <FiShoppingCart className="mr-2" />
-          დამატება
-        </Button>
-        <Button className="p-4 bg-indigo-600 w-full lg:w-[47%]">ყიდვა</Button>
-      </div>
+      <Button
+        className="p-4 flex items-center justify-center w-full"
+        onClick={handleAddToCart}
+        variant="gradient"
+        loading={isAdding}
+      >
+        <FiShoppingCart className="mr-2" />
+        დამატება
+      </Button>
     </div>
   );
 };

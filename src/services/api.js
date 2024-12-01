@@ -188,7 +188,25 @@ export const deleteCartItem = async (id, accessToken) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Failed to delete real estate", error);
+    console.error("დაფიქსირდა შეცდომა", error);
+    throw error;
+  }
+};
+
+export const deleteCart = async (accessToken) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/cart/clear`,
+      {}, 
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data; 
+  } catch (error) {
+    console.error("დაფიქსირდა შეცდომა", error);
     throw error;
   }
 };

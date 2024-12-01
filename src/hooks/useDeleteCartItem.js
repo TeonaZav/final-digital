@@ -10,7 +10,6 @@ export const useDeleteCartItem = (accessToken, product_id) => {
 
   const { isLoading: isDeletingCartItem, mutate: deleteItem } = useMutation({
     mutationFn: (cartItemId) => {
-
       return deleteCartItem(cartItemId, accessToken);
     },
     onSuccess: () => {
@@ -34,11 +33,10 @@ export const handleCartItemDelete = (
   dispatch
 ) => {
   e.preventDefault();
-console.log(cartItemId)
+
   if (accessToken) {
     deleteItem(cartItemId);
   } else {
-    dispatch(addItem({ ...product, count: 1 }));
     dispatch(removeItem({ product_id }));
   }
 };

@@ -27,11 +27,11 @@ const CartTotals = () => {
             return (
               <li
                 key={`${index}_${item.id}`}
-                className="flex justify-between gap-4"
+                className="flex justify-between gap-4 text-sm"
               >
                 <span>{item?.title}</span>
                 <span>{item?.count}</span>
-                <span>{item?.price} ₾</span>
+                <span>{item?.price * item.count} ₾</span>
               </li>
             );
           })}
@@ -39,11 +39,11 @@ const CartTotals = () => {
 
         <p className="border-base-300 flex justify-between border-b pb-2">
           <span>ფასდაკლებამდე: </span>
-          <span className="font-medium">{cartTotalGross} ₾</span>
+          <span className="font-medium text-sm">{cartTotalGross} ₾</span>
         </p>
         <p className="border-base-300 flex justify-between border-b pb-2">
           <span>ფასდაკლება: </span>
-          <span className="font-medium">-{totalDiscount} ₾</span>
+          <span className="font-medium text-sm">-{totalDiscount} ₾</span>
         </p>
         <p className="border-base-300 flex justify-between border-b pb-2">
           <span className="flex items-center gap-2">

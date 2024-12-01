@@ -3,11 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Checkbox } from "@material-tailwind/react";
 import { IoTrashBinOutline } from "react-icons/io5";
 import CartItem from "./CartItem";
+import { useDeleteCart } from "../../hooks/useDeleteCart";
+import { clearCart } from "../../features/cart/cartSlice";
 
 const CartItemsList = () => {
   const cartItems = useSelector((state) => state.cartState.cartItems);
+
   const dispatch = useDispatch();
+
+  const accessToken = useSelector(
+    (state) => state.userState?.user?.access_token
+  );
+
   const [selectedItems, setSelectedItems] = useState([]);
+  const { emptyCart, isDeleting } = useDeleteCart();
 
   useEffect(() => {
     const allProductIds = cartItems.map((item) => item.product_id);
@@ -31,9 +40,15 @@ const CartItemsList = () => {
     }
   };
 
-  const handleDeleteAll = () => {
-    dispatch(clearCart());
-    setSelectedItems([]);
+  const handleEmptyCart = (e) => {
+    e.preventDefault();
+    if (accessToken) {
+      emptyCart(accessToken);
+      setSelectedItems([]);
+    } else {
+      dispatch(clearCart());
+      setSelectedItems([]);
+    }
   };
 
   return (
@@ -51,8 +66,8 @@ const CartItemsList = () => {
         <Button
           variant="text"
           className="text-sm flex items-center gap-1"
-          onClick={handleDeleteAll}
-          disabled={selectedItems.length <= 0}
+          onClick={handleEmptyCart}
+          disabled={selectedItems.length <= 0 || isDeleting}
         >
           <IoTrashBinOutline className="text-xl" /> წაშალე ყველა
         </Button>

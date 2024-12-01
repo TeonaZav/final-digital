@@ -8,6 +8,7 @@ const defaultState = {
   cartTotalGross: 0,
   shipping: 5,
   orderTotal: 0,
+  totalDiscount: 0,
 };
 
 const getCartFromLocalStorage = () => {
@@ -72,7 +73,6 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       Object.assign(state, defaultState);
       localStorage.removeItem("cart");
-      toast.info("პროდუქცია წაიშალა კალათიდან");
     },
 
     setCartItems: (state, action) => {

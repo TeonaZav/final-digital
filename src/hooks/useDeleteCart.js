@@ -1,21 +1,25 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
-import { deleteCartItem } from "../services/apiInvoices";
+import { toast } from "react-toastify";
+import { deleteCart } from "../services/api";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../features/cart/cartSlice";
 
 export const useDeleteCart = () => {
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
 
-  const { isLoading: isDeleting, mutate: deleteCart } = useMutation({
-    mutationFn: deleteCart,
+  const { isLoading: isDeleting, mutate: emptyCart } = useMutation({
+    mutationFn: (accessToken) => deleteCart(accessToken),
     onSuccess: () => {
-      toast.success("პროდუქტი წაიშალა კალათიდან");
-
-      queryClient.invalidateQueries({
-        queryKey: ["cart"],
-      });
+      dispatch(clearCart());
+      toast.success("პროდუქტები წაიშალა კალათიდან");
+      queryClient.invalidateQueries(["cart"]);
     },
-    onError: (err) => toast.error(err.message),
+    onError: (err) => {
+      console.error("Failed to clear cart:", err);
+      toast.error("დაფიქსირდა შეცდომა: კალათა ვერ წაიშალა.");
+    },
   });
 
-  return { isDeleting, deleteCart };
+  return { isDeleting, emptyCart };
 };

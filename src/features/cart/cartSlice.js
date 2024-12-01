@@ -5,6 +5,7 @@ const defaultState = {
   cartItems: [],
   numItemsInCart: 0,
   cartTotal: 0,
+  cartTotalGross: 0,
   shipping: 5,
   orderTotal: 0,
 };
@@ -23,72 +24,84 @@ const cartSlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       const product = action.payload;
-      const existingItem = state.cartItems.find(
-        (i) => i.product_id === product.product_id
+      console.log(product);
+
+      const productId = product.product_id || product.id;
+
+      state.cartItems.push({
+        ...product,
+        product_id: productId,
+        count: product.count || 1,
+      });
+
+      state.numItemsInCart = state.cartItems.reduce(
+        (total, item) => total + item.count,
+        0
       );
 
-      if (existingItem) {
-        existingItem.count += 1;
-      } else {
-        state.cartItems.push({ ...product, count: 1 });
-      }
+      state.cartTotal = state.cartItems.reduce(
+        (total, item) => total + (item.salePrice || item.price) * item.count,
+        0
+      );
 
-      state.numItemsInCart += 1;
-      state.cartTotal += product.price;
+      state.totalDiscount = state.cartItems.reduce(
+        (total, item) =>
+          total + (item.price - (item.salePrice || item.price)) * item.count,
+        0
+      );
+
       cartSlice.caseReducers.calculateTotals(state);
-
-      toast.success("Item added to cart");
       saveCartToLocalStorage(state);
+
+      toast.success("პროდუქტი დაემატა კალათაში");
     },
     removeItem: (state, action) => {
       const { product_id } = action.payload;
+      console.log(product_id, state.cartItems);
       const product = state.cartItems.find((i) => i.product_id === product_id);
       state.cartItems = state.cartItems.filter(
         (i) => i.product_id !== product_id
       );
       state.numItemsInCart -= product.count;
       state.cartTotal -= product.price * product.count;
-      cartSlice.caseReducers.calculateTotals(state);
 
-      toast.error("Item removed from cart");
+      cartSlice.caseReducers.calculateTotals(state);
       saveCartToLocalStorage(state);
     },
+
     clearCart: (state) => {
       Object.assign(state, defaultState);
-      toast.info("Cart cleared");
       localStorage.removeItem("cart");
+      toast.info("პროდუქცია წაიშალა კალათიდან");
     },
+
     setCartItems: (state, action) => {
       state.cartItems = action.payload;
       state.numItemsInCart = action.payload.reduce(
-        (total, item) => total + item.count,
+        (acc, item) => acc + item.count,
+        0
+      );
+      state.cartTotalGross = action.payload.reduce(
+        (acc, item) => acc + item.price * item.count,
         0
       );
       state.cartTotal = action.payload.reduce(
-        (total, item) => total + item.cartProduct.price * item.count,
+        (acc, item) => acc + (item.salePrice || item.price) * item.count,
         0
       );
       cartSlice.caseReducers.calculateTotals(state);
     },
+
     calculateTotals: (state) => {
-      state.cartTotal = state.cartItems.reduce((total, item) => {
-        const price = item.cartProduct.salePrice || item.cartProduct.price; // Use salePrice if available
-        return total + price * item.count;
-      }, 0);
+      state.orderTotal = state.cartTotal + state.shipping;
 
       state.totalDiscount = state.cartItems.reduce((total, item) => {
-        if (item.cartProduct.salePrice) {
-          return (
-            total +
-            (item.cartProduct.price - item.cartProduct.salePrice) * item.count
-          );
+        if (item.salePrice) {
+          total += (item.price - item.salePrice) * item.count;
         }
         return total;
       }, 0);
-
-      state.orderTotal = state.cartTotal + state.shipping;
-
-      saveCartToLocalStorage(state);
+      localStorage.setItem("cart", JSON.stringify(state));
     },
   },
 });

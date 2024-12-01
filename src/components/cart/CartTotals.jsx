@@ -1,10 +1,18 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Card, CardBody, Button } from "@material-tailwind/react";
+import { LuTruck } from "react-icons/lu";
 
 const CartTotals = () => {
-  const { cartItems, numItemsInCart, cartTotal, shipping, tax, orderTotal } =
-    useSelector((state) => state?.cartState);
+  const {
+    cartItems,
+    numItemsInCart,
+    cartTotalGross,
+    cartTotal,
+    shipping,
+    orderTotal,
+    totalDiscount,
+  } = useSelector((state) => state?.cartState);
   const user = useSelector((state) => state.userState.user);
 
   return (
@@ -21,21 +29,31 @@ const CartTotals = () => {
                 key={`${index}_${item.id}`}
                 className="flex justify-between gap-4"
               >
-                <span>{item?.cartProduct?.title}</span>
+                <span>{item?.title}</span>
                 <span>{item?.count}</span>
-                <span>{item?.cartProduct?.price} ₾</span>
+                <span>{item?.price} ₾</span>
               </li>
             );
           })}
         </ul>
 
         <p className="border-base-300 flex justify-between border-b pb-2">
-          <span>მიტანის საფასური: </span>
+          <span>ფასდაკლებამდე: </span>
+          <span className="font-medium">{cartTotalGross} ₾</span>
+        </p>
+        <p className="border-base-300 flex justify-between border-b pb-2">
+          <span>ფასდაკლება: </span>
+          <span className="font-medium">-{totalDiscount} ₾</span>
+        </p>
+        <p className="border-base-300 flex justify-between border-b pb-2">
+          <span className="flex items-center gap-2">
+            <LuTruck />
+            მიტანის საფასური:{" "}
+          </span>
           <span className="font-medium">{shipping} ₾</span>
         </p>
-
         <p className="mt-4 flex justify-between pb-2 text-base font-bold text-gray-900">
-          <span>ჯამური ფასი </span>
+          <span>ჯამური ფასი: </span>
           <span>{orderTotal} ₾</span>
         </p>
 

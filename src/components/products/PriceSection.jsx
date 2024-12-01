@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FiShoppingCart } from "react-icons/fi";
 import { LuTruck } from "react-icons/lu";
 import ProductPrice from "./ProductPrice";
-import { addItem } from "../../features/cart/cartSlice";
+
 import { useAddProductToCart } from "../../hooks/useAddProductToCart";
 
 const PriceSection = ({ product }) => {
@@ -15,14 +15,15 @@ const PriceSection = ({ product }) => {
 
   const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
 
-  const handleAddToCart = (e) => {
+  const handleAdd = (e) => {
     e.preventDefault();
-    addProduct(product.id, {
-      onSuccess: () => {
-        dispatch(addItem({ ...product, count: 1 }));
-      },
-    });
+    if (accessToken) {
+      addProduct(product);
+    } else {
+      dispatch(addItem({ ...product, count: 1 }));
+    }
   };
+
   return (
     <div className="p-6 bg-white rounded-lg border border-gray-300 w-full h-max flex flex-col justify-between gap-4">
       <ProductPrice price={price} salePrice={salePrice} className="text-xl" />
@@ -33,7 +34,7 @@ const PriceSection = ({ product }) => {
 
       <Button
         className="p-4 flex items-center justify-center w-full"
-        onClick={handleAddToCart}
+        onClick={handleAdd}
         variant="gradient"
         loading={isAdding}
       >

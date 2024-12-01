@@ -1,17 +1,36 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button, Typography } from "@material-tailwind/react";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoEyeOutline } from "react-icons/io5";
 import { ProductQuickView, ImageWithSkeleton } from "./..";
 
-const ProductCard = (props) => {
+import { useAddProductToCart } from "../../hooks/useAddProductToCart";
+
+const ProductCard = (product) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const dispatch = useDispatch();
 
-  const { id, title, price, salePrice, image } = props;
+  const { id, title, price, salePrice, image } = product;
+
+  const accessToken = useSelector(
+    (state) => state.userState?.user?.access_token
+  );
+
+  const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    if (accessToken) {
+      addProduct(product);
+    } else {
+      dispatch(addItem({ ...product,  count: 1 }));
+    }
+  };
 
   return (
     <article className="relative min-w-[160px] min-h-72 rounded-lg transition-transform duration-300 hover:scale-105 group">
@@ -68,8 +87,9 @@ const ProductCard = (props) => {
 
       <Button
         className="absolute bottom-7 left-0 right-0 opacity-0 translate-y-full px-4 py-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 flex items-center w-full"
-        onClick={(e) => e.preventDefault()}
+        onClick={handleAdd}
         variant="gradient"
+        disabled={isAdding}
       >
         <FiShoppingCart className="mr-2" />
         დამატება
@@ -79,7 +99,7 @@ const ProductCard = (props) => {
         open={open}
         onOpen={handleOpen}
         onClose={handleClose}
-        {...props}
+        product={product}
       />
     </article>
   );

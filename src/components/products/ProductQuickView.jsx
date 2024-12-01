@@ -12,18 +12,9 @@ import { IoCloseSharp } from "react-icons/io5";
 import { FiShoppingCart } from "react-icons/fi";
 import ProductPrice from "./ProductPrice";
 import ImageWithSkeleton from "../UI/ImageWithSkeleton";
-import { addItem } from "../../features/cart/cartSlice";
 import { useAddProductToCart } from "../../hooks/useAddProductToCart";
 
-const ProductQuickView = ({
-  open,
-  onClose,
-  title,
-  description,
-  category_name,
-  image,
-  id,
-}) => {
+const ProductQuickView = ({ open, onClose, product }) => {
   const productDetails = [
     {
       label: "ფასი:",
@@ -31,27 +22,28 @@ const ProductQuickView = ({
     },
     {
       label: "კატეგორია:",
-      value: category_name,
+      value: product.category_name,
     },
     {
       label: "დასახელება:",
-      value: title,
+      value: product.title,
     },
   ];
   const accessToken = useSelector(
     (state) => state.userState?.user?.access_token
   );
-  console.log(accessToken);
-  const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
   const dispatch = useDispatch();
 
-  const handleAddToCart = (e) => {
+  const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);
+
+  const handleAdd = (e) => {
     e.preventDefault();
-    addProduct(product.id, {
-      onSuccess: () => {
-        dispatch(addItem({ ...product, count: 1 }));
-      },
-    });
+
+    if (accessToken) {
+      addProduct(product);
+    } else {
+      dispatch(addItem({ ...product, count: 1 }));
+    }
   };
   return (
     <Dialog
@@ -61,7 +53,7 @@ const ProductQuickView = ({
     >
       <DialogHeader className="flex justify-between items-center gap-4">
         <Typography className="font-bold text-xl text-gray-900">
-          {description}
+          {product.description}
         </Typography>
         <IconButton className="text-2xl" onClick={onClose}>
           <IoCloseSharp />
@@ -71,8 +63,8 @@ const ProductQuickView = ({
       <DialogBody className="h-full flex flex-col lg:flex-row gap-4 justify-between">
         <figure className="mx-auto lg:mx-0 min-h-[300px] lg:w-1/2 border rounded-lg">
           <ImageWithSkeleton
-            src={image}
-            alt={title}
+            src={product.image}
+            alt={product.title}
             className="rounded-lg"
             skeletonClassName="h-full rounded-lg"
           />
@@ -96,7 +88,7 @@ const ProductQuickView = ({
           <div className="w-full flex flex-wrap justify-between gap-4">
             <Button
               className="p-4 flex items-center justify-center w-full lg:w-[47%]"
-              onClick={handleAddToCart}
+              onClick={handleAdd}
               variant="gradient"
               loading={isAdding}
             >
@@ -104,7 +96,7 @@ const ProductQuickView = ({
               დამატება
             </Button>
 
-            <Link to={`/products/${id}`}>
+            <Link to={`/products/${product.id}`}>
               <Button className="p-4 bg-gray-400 w-full text-gray-900">
                 სრულად ნახვა
               </Button>

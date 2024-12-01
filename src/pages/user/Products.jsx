@@ -16,23 +16,28 @@ const Products = () => {
     dispatch(setPageSize(newPageSize));
   };
 
-  if (error) return <p>Error loading products: {error.message}</p>;
-  if (!isFetching && products.length === 0) return <p>No products found.</p>;
-
   return (
     <>
       <h2 className="text-gray-800 font-semibold text-lg border-b h-10 mb-4">
         {filters.categoryName || "ყველა პროდუქტი"}
       </h2>
       <Filters />
-      <ProductList products={products} />
-      <ProductPagination
-        active={filters.page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-        pageSize={filters.pageSize}
-        onPageSizeChange={handlePageSizeChange}
-      />
+      {!isFetching && products.length === 0 ? (
+        <p>No products found.</p>
+      ) : error ? (
+        <p>Error loading products: {error.message}</p>
+      ) : (
+        <>
+          <ProductList products={products} />
+          <ProductPagination
+            active={filters.page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            pageSize={filters.pageSize}
+            onPageSizeChange={handlePageSizeChange}
+          />
+        </>
+      )}
     </>
   );
 };

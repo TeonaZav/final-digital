@@ -14,3 +14,6 @@ export { default as ErrorMessage } from "./auth/ErrorMessage";
 export { default as FormField } from "./auth/FormFIeld";
 export { default as PriceSection } from "./products/PriceSection";
 export { default as ImageWithSkeleton } from "./UI/ImageWithSkeleton";
+export { default as CartItem } from "./cart/CartItem";
+export { default as CartItemList } from "./cart/CartItemList";
+export { default as CartTotals } from "./cart/CartTotals";

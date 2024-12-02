@@ -95,15 +95,20 @@ const Navigation = () => {
           </Menu>
         </div>
 
-        <div className="hidden md:flex h-full  items-center gap-4">
-          <Badge
-            className="px-1.5 py-0.5 text-[8px]"
-            content={numItemsInCart || 0}
+        <div className="hidden md:flex h-full items-center gap-6">
+          <NavLink
+            to="/cart"
+            className="shrink-0 mt-1 inline-flex flex-col items-center justify-center text-gray-500"
           >
-            <NavLink to="/cart" className="text-blue-gray-600 py-0">
-              <PiShoppingCartSimpleLight className="h-10 w-7" />
-            </NavLink>
-          </Badge>
+            <Badge
+              className="text-[8px] bg-orange-800 shrink-0 px-2"
+              content={numItemsInCart || 0}
+            >
+              <PiShoppingCartSimpleLight className="text-3xl" />
+
+              <span className="sr-only">Cart</span>
+            </Badge>
+          </NavLink>
 
           <>
             {user ? (
@@ -111,9 +116,9 @@ const Navigation = () => {
                 <MenuHandler>
                   <Button
                     variant="outlined"
-                    className="rounded-full p-3 bg-indigo-200 text-indigo-500 border-indigo-300"
+                    className="rounded-full p-2 bg-white text-gray-900 border-gray-400"
                   >
-                    <GoPerson />
+                    <GoPerson className="text-xl font-bold" />
                   </Button>
                 </MenuHandler>
                 <MenuList>
@@ -141,7 +146,7 @@ const Navigation = () => {
               <Link to="/login">
                 <Button
                   variant="outlined"
-                  className="flex items-center gap-x-2 p-1 font-medium border-borderColor"
+                  className="flex text-sm items-center gap-x-2 p-1.5 font-medium border-gray-300"
                 >
                   <GoPerson />
                   შესვლა

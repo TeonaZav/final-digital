@@ -43,9 +43,9 @@ const Login = () => {
             className="mt-4"
             fullWidth
             type="submit"
-            disabled={isLoggingIn}
+            loading={isLoggingIn}
           >
-            {isLoggingIn ? "Logging in..." : "Login"}
+            {isLoggingIn ? "მუშავდება..." : "შესვლა"}
           </Button>
         </form>
       </FormProvider>

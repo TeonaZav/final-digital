@@ -18,3 +18,7 @@ export { default as CartItem } from "./cart/CartItem";
 export { default as CartItemList } from "./cart/CartItemList";
 export { default as CartTotals } from "./cart/CartTotals";
 export { default as Heading } from "./UI/Heading";
+export { default as CheckoutProductList } from "./checkout/CheckoutProductList";
+export { default as CheckoutTotals } from "./checkout/ChekoutTotals";
+export { default as PaymentOptions } from "./checkout/PaymentOptions";
+export { default as CartTitle } from "./UI/CartTitle";

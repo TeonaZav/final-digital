@@ -53,7 +53,7 @@ const Register = () => {
             placeholder="Phone Number"
           />
 
-          <Button type="submit" fullWidth disabled={isCreating}>
+          <Button type="submit" fullWidth loading={isCreating}>
             {isCreating ? "იტვირთება..." : "ანგარიშის შექმნა"}
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">

@@ -16,7 +16,7 @@ const FormField = ({
 
   return (
     <div className="mb-4 flex flex-col gap-2">
-      <Typography variant="h6" color="blue-gray" className="-mb-3">
+      <Typography variant="h6" color="blue-gray" className="-mb-1">
         {label}
       </Typography>
       <Input

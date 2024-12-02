@@ -42,7 +42,7 @@ const ProductCard = (product) => {
           <ImageWithSkeleton
             src={image}
             alt={title}
-            className="rounded-lg"
+            className="rounded-lg !object-contain"
             skeletonClassName="h-full rounded-lg"
           />
 

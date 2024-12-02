@@ -21,7 +21,10 @@ const Products = () => {
       <h2 className="text-gray-800 font-semibold text-lg border-b h-10 mb-4">
         {filters.categoryName || "ყველა პროდუქტი"}
       </h2>
-      <Filters />
+      <div className="xl:hidden">
+        <Filters />
+      </div>
+
       {!isFetching && products.length === 0 ? (
         <p>No products found.</p>
       ) : error ? (

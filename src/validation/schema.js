@@ -1,29 +1,30 @@
 import * as yup from "yup";
 
 export const registrationSchema = yup.object().shape({
-  first_name: yup.string().required("First name is required"),
-  last_name: yup.string().required("Last name is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
+  first_name: yup.string().required("სახელი სავალდებულოა"),
+  last_name: yup.string().required("გვარი სავალდებულოა"),
+  email: yup
+    .string()
+    .email("ელ. ფოსტის არასწორი ფორმატი")
+    .required("ელ. ფოსტა სავალდებულოა"),
   password: yup
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .required("Password is required"),
+    .required("პაროლი სავალდებულოა")
+    .min(8, "პაროლი არ უნდა იყოს 8 სიმბოლოზე ნაკლები"),
+
   phone_number: yup
     .string()
+    .required("ტელეფონის ნომერი სავალდებულოა")
     .matches(
       /^[0-9]{9,14}$/,
-      "Phone number must be between 9 and 14 digits and numeric only"
-    )
-    .required("Phone number is required"),
+      "ტელეფონის ნომერი უნდა იყოს 9/14 ციფრისგან შემდგარი"
+    ),
 });
 
 export const loginSchema = yup.object().shape({
   email: yup
     .string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
+    .email("ელ. ფოსტის არასწორი ფორმატი")
+    .required("ელ. ფოსტა სავალდებულოა"),
+  password: yup.string().required("პაროლი სავალდებულოა"),
 });

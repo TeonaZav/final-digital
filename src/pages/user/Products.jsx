@@ -21,7 +21,7 @@ const Products = () => {
       <h2 className="text-gray-800 font-semibold text-lg border-b h-10 mb-4">
         {filters.categoryName || "ყველა პროდუქტი"}
       </h2>
-      <div className="mb-4 xl:hidden">
+      <div className="xl:hidden">
         <Filters />
       </div>
 

@@ -67,7 +67,7 @@ const Filters = () => {
         )}
       </button>
       <div
-        className={`border-b mb-4 flex flex-col gap-4 rounded-lg  overflow-hidden transition-all duration-300 ${
+        className={`border-b pb-6 mb-4 flex flex-col gap-4 overflow-hidden transition-all duration-300 ${
           isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >

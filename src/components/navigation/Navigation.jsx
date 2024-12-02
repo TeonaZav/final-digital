@@ -5,7 +5,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   Navbar,
   Button,
-  IconButton,
   Badge,
   Menu,
   MenuHandler,
@@ -19,7 +18,6 @@ import { FiLogOut } from "react-icons/fi";
 import { CiSettings } from "react-icons/ci";
 import { IoPersonCircle } from "react-icons/io5";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { clearCart } from "../../features/cart/cartSlice";
 import { logoutUser } from "../../features/user/userSlice";
 import logo from "./../../assets/logo-blue.svg";
@@ -72,9 +70,6 @@ const Navigation = () => {
                 />
               </Button>
             </MenuHandler>
-            <IconButton variant="text" className="block md:hidden">
-              <RxHamburgerMenu className="text-2xl" />
-            </IconButton>
             <MenuList className="flex flex-col">
               {categories.map((category) => (
                 <Link key={category.id} to="/products">

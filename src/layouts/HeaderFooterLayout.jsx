@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Header, Footer } from "./";
+import BottomNavigation from "../components/navigation/BottomNavigation";
 
 const HeaderFooterLayout = () => {
   return (
@@ -9,6 +10,9 @@ const HeaderFooterLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <div className="lg:hidden">
+        <BottomNavigation />
+      </div>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Header, Footer } from "./";
 import { SidebarMenu, BreadcrumbsNavigation, Filters } from "../components";
+import BottomNavigation from "../components/navigation/BottomNavigation";
 
 const SidebarLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -9,7 +10,7 @@ const SidebarLayout = () => {
   return (
     <div className="">
       <Header />
-      <div className="container max-w-[1240px] mx-auto flex flex-col lg:grid lg:grid-cols-12 lg:gap-4 p-6">
+      <div className="container max-w-[1240px] mx-auto flex flex-col flex-1 lg:grid lg:grid-cols-12 lg:gap-4 p-6">
         <aside
           id="default-sidebar"
           className={`hidden xl:block lg:col-span-3 z-40 transition-all`}
@@ -37,6 +38,9 @@ const SidebarLayout = () => {
       >
         <span className="sr-only">Open sidebar</span>
       </button>
+      <div className="lg:hidden">
+        <BottomNavigation />
+      </div>
     </div>
   );
 };

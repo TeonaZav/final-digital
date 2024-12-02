@@ -197,16 +197,30 @@ export const deleteCart = async (accessToken) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/cart/clear`,
-      {}, 
+      {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       }
     );
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error("დაფიქსირდა შეცდომა", error);
     throw error;
+  }
+};
+
+export const purchase = async (data, accessToken) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/purchases`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Failed to purchase products", error);
   }
 };

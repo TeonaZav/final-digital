@@ -11,6 +11,9 @@ import { setCartItems } from "./features/cart/cartSlice";
 import SidebarLayout from "./layouts/SidebarLayout";
 import HeaderFooterLayout from "./layouts/HeaderFooterLayout";
 import { LoadingSpinner } from "./components";
+import ErrorBoundary from "./components/ErrorBoundary";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import GuestRoute from "./components/auth/GuestRoute";
 
 const Cart = React.lazy(() => import("./pages/user/Cart"));
 const Checkout = React.lazy(() => import("./pages/user/Checkout"));
@@ -19,13 +22,15 @@ const Login = React.lazy(() => import("./pages/user/Login"));
 const ProductDetails = React.lazy(() => import("./pages/user/ProductDetails"));
 const Products = React.lazy(() => import("./pages/user/Products"));
 const Register = React.lazy(() => import("./pages/user/Register"));
+const UserDetails = React.lazy(() => import("./pages/user/UserProfile"));
 
 const Fallback = () => <LoadingSpinner />;
 
 const App = () => {
   const accessToken = useSelector(
-    (state) => state.userState?.user?.access_token
+    (state) => state.userState?.loginData?.access_token
   );
+  console.log(accessToken);
   const { cart } = useFetchCart(accessToken);
   const dispatch = useDispatch();
 
@@ -37,25 +42,56 @@ const App = () => {
 
   return (
     <Router>
-      <Suspense fallback={<Fallback />}>
-        <Routes>
-          {/* Redirect / to /products */}
-          <Route path="/" element={<Navigate to="/products" replace />} />
+      <ErrorBoundary>
+        <Suspense fallback={<Fallback />}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/products" replace />} />
 
-          <Route element={<HeaderFooterLayout />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/products/:id" element={<ProductDetails />} />
-            <Route path="*" element={<Error />} />
-          </Route>
+            <Route element={<HeaderFooterLayout />}>
+              <Route
+                path="/login"
+                element={
+                  <GuestRoute>
+                    <Login />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <GuestRoute>
+                    <Register />
+                  </GuestRoute>
+                }
+              />
+              <Route path="/cart" element={<Cart />} />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <Checkout />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route element={<SidebarLayout />}>
-            <Route path="/products" element={<Products />} />
-          </Route>
-        </Routes>
-      </Suspense>
+              <Route path="/products/:id" element={<ProductDetails />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <UserDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<Error />} />
+            </Route>
+
+            <Route element={<SidebarLayout />}>
+              <Route path="/products" element={<Products />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </Router>
   );
 };

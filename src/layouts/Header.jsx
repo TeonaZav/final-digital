@@ -1,6 +1,6 @@
 import { Navigation } from "../components";
 
-const Header = () => {
+const Header = ({ accessToken }) => {
   return (
     <>
       <header className="h-[36px] bg-gradient-to-r from-[#1734B0] via-[#253DAB] to-[#B41173] px-4 py-2 text-center text-white sm:px-10">
@@ -9,7 +9,7 @@ const Header = () => {
         </div>
       </header>
 
-      <Navigation />
+      <Navigation accessToken={accessToken} />
     </>
   );
 };

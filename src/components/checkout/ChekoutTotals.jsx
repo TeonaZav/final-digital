@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Card, CardBody, Button, Typography } from "@material-tailwind/react";
 import { LuTruck } from "react-icons/lu";
-import { CartTitle } from "./../";
+import { CardTitle } from "./../";
 import usePurchase from "../../hooks/usePurchase";
 
 const ChekoutTotals = ({ selectedPayment, cartItems }) => {
@@ -34,7 +34,7 @@ const ChekoutTotals = ({ selectedPayment, cartItems }) => {
   return (
     <Card className="card bg-base-200  shadow-sm shadow-blue-gray-50 border h-max bg-white">
       <CardBody className="card-body flex flex-col gap-4 px-3">
-        <CartTitle title="შეკვეთის დეტალები" />
+        <CardTitle title="შეკვეთის დეტალები" />
 
         <div className="flex justify-between items-center text-gray-900 text-xs font-semibold">
           <Typography className="text-sm font-medium">{`ნივთები (${numItemsInCart}) `}</Typography>

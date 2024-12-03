@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Header, Footer } from "./";
 import { SidebarMenu, BreadcrumbsNavigation, Filters } from "../components";
 import BottomNavigation from "../components/navigation/BottomNavigation";
 
 const SidebarLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const accessToken = useSelector(
+    (state) => state.userState?.loginData?.access_token
+  );
 
   return (
     <div className="">
-      <Header />
+      <Header accessToken={accessToken} />
       <div className="container max-w-[1240px] mx-auto flex flex-col flex-1 lg:grid lg:grid-cols-12 lg:gap-4 p-6">
         <aside
           id="default-sidebar"
@@ -39,7 +43,7 @@ const SidebarLayout = () => {
         <span className="sr-only">Open sidebar</span>
       </button>
       <div className="lg:hidden">
-        <BottomNavigation />
+        <BottomNavigation accessToken={accessToken} />
       </div>
     </div>
   );

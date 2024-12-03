@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useQueryClient } from "@tanstack/react-query";
+import { Link, NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import {
   IconButton,
   Drawer,
@@ -14,37 +14,31 @@ import { GoPerson } from "react-icons/go";
 import { FiLogOut } from "react-icons/fi";
 import { CiSettings } from "react-icons/ci";
 import { IoPersonCircle } from "react-icons/io5";
-import { clearFilters } from "../../features/products/productSlice";
-import { clearCart } from "../../features/cart/cartSlice";
-import { logoutUser } from "../../features/user/userSlice";
+import { useAuthActions } from "../../hooks/useAuthActions";
 
-const BottomNavigation = () => {
+const BottomNavigation = ({ accessToken }) => {
   const [openBottom, setOpenBottom] = useState(false);
-  const [_, setSearchParams] = useSearchParams();
+  const { handleLogout } = useAuthActions();
   const numItemsInCart = useSelector((state) => state.cartState.numItemsInCart);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-  const user = useSelector((state) => state.userState.user);
 
   const openDrawerBottom = () => setOpenBottom(true);
   const closeDrawerBottom = () => setOpenBottom(false);
 
-  const clearParams = () => {
-    setSearchParams({});
-    dispatch(clearFilters());
-  };
+  // const clearParams = () => {
+  //   setSearchParams({});
+  //   dispatch(clearFilters());
+  // };
 
-  const handleLogout = () => {
-    dispatch(clearCart());
-    dispatch(logoutUser());
-    clearParams();
+  // const handleLogout = () => {
+  //   dispatch(clearCart());
+  //   dispatch(logoutUser());
+  //   clearParams();
 
-    queryClient.clear();
-    navigate("/products");
-    localStorage.removeItem("loginData");
-    localStorage.removeItem("cart");
-  };
+  //   queryClient.clear();
+  //   navigate("/products");
+  //   localStorage.removeItem("loginData");
+  //   localStorage.removeItem("cart");
+  // };
 
   return (
     <>
@@ -79,7 +73,7 @@ const BottomNavigation = () => {
               <span className="sr-only">Cart</span>
             </Badge>
           </NavLink>
-          {user ? (
+          {accessToken ? (
             <div className="inline-flex flex-col items-center justify-center">
               <IconButton onClick={openDrawerBottom} variant="text">
                 <GoPerson className="text-3xl" />
@@ -108,14 +102,13 @@ const BottomNavigation = () => {
         className="p-4 h-screen"
       >
         <ul className="flex flex-col gap-8 text-base text-gray-700">
-          <li className="flex items-center gap-1 ">
-            <CiSettings /> დეტალები
-          </li>
           <li className="flex items-center gap-2 pb-6 border-b">
-            <IoPersonCircle />
-            <Typography variant="small" className="font-medium">
-              ჩემი პროფილი
-            </Typography>
+            <Link to="/profile">
+              <IoPersonCircle />
+              <Typography variant="small" className="font-medium">
+                ჩემი პროფილი
+              </Typography>
+            </Link>
           </li>
           <li className="flex items-center gap-2 " onClick={handleLogout}>
             <FiLogOut />

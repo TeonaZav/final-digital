@@ -1,6 +1,6 @@
 import { Typography } from "@material-tailwind/react";
 
-const CartTitle = ({ title }) => {
+const CardTitle = ({ title }) => {
   return (
     <Typography variant="h3" className="text-sm text-black mb-4">
       {title}
@@ -8,4 +8,4 @@ const CartTitle = ({ title }) => {
   );
 };
 
-export default CartTitle;
+export default CardTitle;

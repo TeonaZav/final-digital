@@ -1,5 +1,5 @@
 import { Card, Radio } from "@material-tailwind/react";
-import { CartTitle } from "./../";
+import { CardTitle } from "./../";
 import { RiVisaFill } from "react-icons/ri";
 import { TbCurrencyLari } from "react-icons/tb";
 
@@ -12,7 +12,7 @@ const PaymentOptions = ({ selectedPayment, onSelectOption }) => {
   console.log(selectedPayment);
   return (
     <Card className="w-full mx-auto p-4">
-      <CartTitle title="გადახდის მეთოდი" />
+      <CardTitle title="გადახდის მეთოდი" />
 
       <ul className="space-y-3">
         {options.map((option) => (

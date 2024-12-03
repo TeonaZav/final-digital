@@ -1,14 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-const getUserFromLocalStorage = () => {
-  const loginData = JSON.parse(localStorage.getItem("loginData")) || null;
-  const userDetails = JSON.parse(localStorage.getItem("userDetails")) || null;
-  return loginData ? { ...loginData, userDetails } : null;
-};
+const getLoginDataFromLocalStorage = () =>
+  JSON.parse(localStorage.getItem("loginData")) || null;
+
+const getUserDetailsFromLocalStorage = () =>
+  JSON.parse(localStorage.getItem("userDetails")) || null;
 
 const initialState = {
-  user: getUserFromLocalStorage(),
+  loginData: getLoginDataFromLocalStorage(),
+  userDetails: getUserDetailsFromLocalStorage(),
 };
 
 const userSlice = createSlice({
@@ -16,35 +17,38 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     loginUser: (state, action) => {
-      const loginData = {
-        access_token: action.payload.access_token,
-        refresh_token: action.payload.refresh_token,
-      };
+      const { access_token, refresh_token } = action.payload;
 
-  
-      state.user = {
-        ...state.user,
-        ...loginData,
-      };
+      const loginData = { access_token, refresh_token };
+      state.loginData = loginData;
 
-    
       localStorage.setItem("loginData", JSON.stringify(loginData));
 
-   
       if (action.payload.userDetails) {
-        state.user.userDetails = action.payload.userDetails;
-
+        state.userDetails = action.payload.userDetails;
+        localStorage.setItem(
+          "userDetails",
+          JSON.stringify(action.payload.userDetails)
+        );
       }
     },
+    setUserDetails: (state, action) => {
+      state.userDetails = action.payload;
+
+      localStorage.setItem("userDetails", JSON.stringify(action.payload));
+    },
     logoutUser: (state) => {
-      state.user = null;
+      state.loginData = null;
+      state.userDetails = null;
+
       localStorage.removeItem("loginData");
       localStorage.removeItem("userDetails");
+
       toast.success("Logged out successfully");
     },
   },
 });
 
-export const { loginUser, logoutUser } = userSlice.actions;
+export const { loginUser, setUserDetails, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

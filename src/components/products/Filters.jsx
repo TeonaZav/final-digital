@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
@@ -11,16 +11,17 @@ import { MdFilterAlt, MdFilterAltOff } from "react-icons/md";
 const Filters = () => {
   const dispatch = useDispatch();
   const filters = useSelector((state) => state.products.filters);
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [isOpen, setIsOpen] = useState(false);
   const [minPrice, setMinPrice] = useState(filters.minPrice || "");
   const [maxPrice, setMaxPrice] = useState(filters.maxPrice || "");
-  const [onlySales, setOnlySales] = useState(filters.onlySales);
+  const [onlySales, setOnlySales] = useState(filters.onlySales || false);
 
   const isFilterApplied = () => {
     return minPrice || maxPrice || onlySales;
   };
+
   const toggleFilters = () => {
     setIsOpen(!isOpen);
   };
@@ -30,16 +31,21 @@ const Filters = () => {
       ...(minPrice && { minPrice }),
       ...(maxPrice && { maxPrice }),
       ...(onlySales && { onlySales: true }),
+      page: 1,
     };
 
     dispatch(setFilters(newFilters));
 
+
     setSearchParams((prevParams) => {
       const updatedParams = new URLSearchParams(prevParams);
       if (minPrice) updatedParams.set("minPrice", minPrice);
+      else updatedParams.delete("minPrice");
       if (maxPrice) updatedParams.set("maxPrice", maxPrice);
+      else updatedParams.delete("maxPrice");
       if (onlySales) updatedParams.set("onlySales", true);
       else updatedParams.delete("onlySales");
+      updatedParams.set("page", 1);
       return updatedParams;
     });
   };
@@ -50,11 +56,30 @@ const Filters = () => {
     setOnlySales(false);
 
     dispatch(clearFiltersAction());
-    setSearchParams({});
+    setSearchParams({ page: 1 });
   };
 
+
+  useEffect(() => {
+    const minPriceParam = searchParams.get("minPrice") || "";
+    const maxPriceParam = searchParams.get("maxPrice") || "";
+    const onlySalesParam = searchParams.get("onlySales") === "true";
+
+    setMinPrice(minPriceParam);
+    setMaxPrice(maxPriceParam);
+    setOnlySales(onlySalesParam);
+
+    const syncedFilters = {
+      ...(minPriceParam && { minPrice: minPriceParam }),
+      ...(maxPriceParam && { maxPrice: maxPriceParam }),
+      ...(onlySalesParam && { onlySales: true }),
+    };
+
+    dispatch(setFilters(syncedFilters));
+  }, [searchParams, dispatch]);
+
   return (
-    <div className="flex flex-col gap-4  mt-4">
+    <div className="flex flex-col gap-4 mt-4">
       <button
         onClick={toggleFilters}
         className="flex items-center text-xs font-bold"

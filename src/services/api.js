@@ -25,6 +25,22 @@ export const loginUser = async (formData) => {
   }
 };
 
+export const updateUserApi = async (data, accessToken) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/user`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("დაფიქსირდა შეცდომა:", error);
+    throw error;
+  }
+};
+
 export const fetchUserDetails = async (accessToken) => {
   if (!accessToken) {
     throw new Error("Access token is missing.");

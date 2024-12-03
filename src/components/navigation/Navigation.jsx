@@ -14,7 +14,6 @@ import {
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
 import { GoPerson } from "react-icons/go";
 import { FiLogOut } from "react-icons/fi";
-import { CiSettings } from "react-icons/ci";
 import { IoPersonCircle } from "react-icons/io5";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 

@@ -12,7 +12,6 @@ import { RiHomeLine } from "react-icons/ri";
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
 import { GoPerson } from "react-icons/go";
 import { FiLogOut } from "react-icons/fi";
-import { CiSettings } from "react-icons/ci";
 import { IoPersonCircle } from "react-icons/io5";
 import { useAuthActions } from "../../hooks/useAuthActions";
 

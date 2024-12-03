@@ -10,6 +10,7 @@ export const useUpdateUser = () => {
     onSuccess: () => {
       toast.success("მონაცემები დარედაქტირდა");
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["userDetails"] });
     },
     onError: (err) => {
       const errorMessage = err?.response?.data?.message || "დაფიქსირდა შეცდომა";

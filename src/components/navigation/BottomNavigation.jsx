@@ -14,6 +14,7 @@ import { GoPerson } from "react-icons/go";
 import { FiLogOut } from "react-icons/fi";
 import { IoPersonCircle } from "react-icons/io5";
 import { useAuthActions } from "../../hooks/useAuthActions";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 const BottomNavigation = ({ accessToken }) => {
   const [openBottom, setOpenBottom] = useState(false);
@@ -22,22 +23,6 @@ const BottomNavigation = ({ accessToken }) => {
 
   const openDrawerBottom = () => setOpenBottom(true);
   const closeDrawerBottom = () => setOpenBottom(false);
-
-  // const clearParams = () => {
-  //   setSearchParams({});
-  //   dispatch(clearFilters());
-  // };
-
-  // const handleLogout = () => {
-  //   dispatch(clearCart());
-  //   dispatch(logoutUser());
-  //   clearParams();
-
-  //   queryClient.clear();
-  //   navigate("/products");
-  //   localStorage.removeItem("loginData");
-  //   localStorage.removeItem("cart");
-  // };
 
   return (
     <>
@@ -101,8 +86,14 @@ const BottomNavigation = ({ accessToken }) => {
         className="p-4 h-screen"
       >
         <ul className="flex flex-col gap-8 text-base text-gray-700">
-          <li className="flex items-center gap-2 pb-6 border-b">
-            <Link to="/profile">
+          <Link to="/admin/dashboard" className="flex items-center gap-2">
+            <MdOutlineAdminPanelSettings />
+            <Typography variant="small" className="font-medium">
+              ადმინ პანელი
+            </Typography>
+          </Link>
+          <li className=" pb-6 border-b">
+            <Link to="/profile" className="flex items-center gap-2">
               <IoPersonCircle />
               <Typography variant="small" className="font-medium">
                 ჩემი პროფილი

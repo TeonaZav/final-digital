@@ -14,6 +14,7 @@ import {
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
 import { GoPerson } from "react-icons/go";
 import { FiLogOut } from "react-icons/fi";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { IoPersonCircle } from "react-icons/io5";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
@@ -99,6 +100,17 @@ const Navigation = ({ accessToken }) => {
                   </Button>
                 </MenuHandler>
                 <MenuList>
+                  <MenuItem>
+                    <Link
+                      to="/admin/dashboard"
+                      className="flex items-center gap-2"
+                    >
+                      <MdOutlineAdminPanelSettings />
+                      <Typography variant="small" className="font-medium">
+                        ადმინ პანელი
+                      </Typography>
+                    </Link>
+                  </MenuItem>
                   <MenuItem>
                     <Link to="/profile" className="flex items-center gap-2">
                       <IoPersonCircle />

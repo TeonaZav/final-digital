@@ -14,6 +14,7 @@ import { LoadingSpinner } from "./components";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import GuestRoute from "./components/auth/GuestRoute";
+import AdminLayout from "./layouts/AdminLayout";
 
 const Cart = React.lazy(() => import("./pages/user/Cart"));
 const Checkout = React.lazy(() => import("./pages/user/Checkout"));
@@ -23,6 +24,7 @@ const ProductDetails = React.lazy(() => import("./pages/user/ProductDetails"));
 const Products = React.lazy(() => import("./pages/user/Products"));
 const Register = React.lazy(() => import("./pages/user/Register"));
 const UserDetails = React.lazy(() => import("./pages/user/UserProfile"));
+const Dashboard = React.lazy(() => import("./pages/admin/Dashboard"));
 
 const Fallback = () => <LoadingSpinner />;
 
@@ -46,6 +48,10 @@ const App = () => {
         <Suspense fallback={<Fallback />}>
           <Routes>
             <Route path="/" element={<Navigate to="/products" replace />} />
+            <Route
+              path="/admin"
+              element={<Navigate to="/admin/dashboard" replace />}
+            />
 
             <Route element={<HeaderFooterLayout />}>
               <Route
@@ -83,9 +89,19 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+
               <Route path="*" element={<Error />} />
             </Route>
-
+            <Route element={<AdminLayout />}>
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
             <Route element={<SidebarLayout />}>
               <Route path="/products" element={<Products />} />
             </Route>

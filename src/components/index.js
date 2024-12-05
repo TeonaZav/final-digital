@@ -22,3 +22,6 @@ export { default as CheckoutProductList } from "./checkout/CheckoutProductList";
 export { default as CheckoutTotals } from "./checkout/ChekoutTotals";
 export { default as PaymentOptions } from "./checkout/PaymentOptions";
 export { default as CardTitle } from "./UI/CardTitle";
+
+export { default as ManageCategoryContent } from "./admin/ManageCategoryContent";
+export { default as ManageProductContent } from "./admin/ManageProductContent";

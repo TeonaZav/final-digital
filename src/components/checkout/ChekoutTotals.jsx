@@ -14,7 +14,7 @@ const ChekoutTotals = ({ selectedPayment, cartItems }) => {
   } = useSelector((state) => state?.cartState);
 
   const accessToken = useSelector(
-    (state) => state.userState?.user?.access_token
+    (state) => state.userState?.loginData?.access_token
   );
   const { isPurchasing, purchaseProducts } = usePurchase();
 

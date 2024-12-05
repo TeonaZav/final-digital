@@ -10,6 +10,7 @@ const ImageUpload = ({ fieldName, onChange, storageKey, onCancel = false }) => {
   const {
     formState: { errors },
     setError,
+    clearErrors,
   } = useFormContext();
 
   const handleFileProcessing = (file) => {
@@ -44,6 +45,7 @@ const ImageUpload = ({ fieldName, onChange, storageKey, onCancel = false }) => {
 
   const handleRemoveImage = () => {
     onChange(null);
+
     const sessionData = JSON.parse(sessionStorage.getItem(storageKey)) || {};
     delete sessionData[fieldName];
     sessionStorage.setItem(storageKey, JSON.stringify(sessionData));
@@ -52,6 +54,7 @@ const ImageUpload = ({ fieldName, onChange, storageKey, onCancel = false }) => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    clearErrors(fieldName);
   };
   useEffect(() => {
     if (onCancel) {

@@ -159,6 +159,7 @@ export const deleteProductApi = async (id, accessToken) => {
 };
 
 export const deleteCategoryApi = async (id, accessToken) => {
+  console.log(id);
   try {
     const response = await axios.delete(`${BASE_URL}/product-category/${id}`, {
       headers: {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useForm, FormProvider, Controller } from "react-hook-form";
-import { Button } from "@material-tailwind/react";
+import { Button, Card } from "@material-tailwind/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCreateCategory } from "../../hooks/useCreateCategory";
 import { categoryValidationSchema } from "../../validation/schema";
@@ -68,11 +68,7 @@ const CategoryForm = () => {
     createNewCategory(newData, {
       onSuccess: () => {
         sessionStorage.removeItem(STORAGE_KEY);
-        reset(defaultValues);
-
-        setTimeout(() => {
-          onClose();
-        }, 2000);
+        handleCancel();
       },
     });
   };
@@ -83,10 +79,10 @@ const CategoryForm = () => {
   };
 
   return (
-    <div className="py-20 container">
+    <section className="container mx-auto mb-10">
       <FormProvider {...methods}>
         <form
-          className="flex flex-col max-w-[700px] mx-auto gap-4"
+          className="flex flex-col max-w-[400px] gap-4 bg-white p-7 rounded-lg"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <h2 className="text-xl font-semibold leading-tight mb-16">
@@ -131,7 +127,7 @@ const CategoryForm = () => {
           </div>
         </form>
       </FormProvider>
-    </div>
+    </section>
   );
 };
 

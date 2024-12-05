@@ -13,7 +13,7 @@ const CartItem = ({ cartItem }) => {
   const { title, price, salePrice, image, count } = cartItem;
 
   const accessToken = useSelector(
-    (state) => state.userState?.user?.access_token
+    (state) => state.userState?.loginData?.access_token
   );
 
   const dispatch = useDispatch();

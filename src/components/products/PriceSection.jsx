@@ -10,8 +10,9 @@ import { addItem } from "../../features/cart/cartSlice";
 const PriceSection = ({ product }) => {
   const { price, salePrice } = product;
   const dispatch = useDispatch();
+
   const accessToken = useSelector(
-    (state) => state.userState?.user?.access_token
+    (state) => state.userState?.loginData?.access_token
   );
 
   const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);

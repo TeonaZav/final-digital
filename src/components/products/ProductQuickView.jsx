@@ -30,9 +30,11 @@ const ProductQuickView = ({ open, onClose, product }) => {
       value: product.title,
     },
   ];
+
   const accessToken = useSelector(
-    (state) => state.userState?.user?.access_token
+    (state) => state.userState?.loginData?.access_token
   );
+
   const dispatch = useDispatch();
 
   const { addProduct, isLoading: isAdding } = useAddProductToCart(accessToken);

@@ -13,7 +13,10 @@ const CartTotals = () => {
     orderTotal,
     totalDiscount,
   } = useSelector((state) => state?.cartState);
-  const user = useSelector((state) => state.userState.user);
+  
+  const accessToken = useSelector(
+    (state) => state.userState?.loginData?.access_token
+  );
 
   return (
     <Card className="card bg-base-200">
@@ -57,7 +60,7 @@ const CartTotals = () => {
           <span>{orderTotal} ₾</span>
         </p>
 
-        {user ? (
+        {accessToken ? (
           <Link to="/checkout" className="btn btn-primary btn-block mt-8">
             <Button className="bg-indigo-700 w-full text-base">ყიდვა</Button>
           </Link>

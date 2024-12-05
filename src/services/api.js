@@ -1,6 +1,5 @@
 import axios from "axios";
 
-const accessToken = "";
 const BASE_URL = "http://localhost:3000";
 
 export const createUser = async (formData) => {
@@ -59,21 +58,21 @@ export const fetchUserDetails = async (accessToken) => {
   }
 };
 
-export const createProduct = async (formData) => {
+export const createProduct = async (formData, accessToken) => {
   try {
     const response = await axios.post(`${BASE_URL}/product`, formData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Failed to create product", error);
   }
 };
 
-export const createCategory = async (formData) => {
+export const createCategory = async (formData, accessToken) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/product-category`,

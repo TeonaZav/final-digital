@@ -36,7 +36,6 @@ const Filters = () => {
 
     dispatch(setFilters(newFilters));
 
-
     setSearchParams((prevParams) => {
       const updatedParams = new URLSearchParams(prevParams);
       if (minPrice) updatedParams.set("minPrice", minPrice);
@@ -58,7 +57,6 @@ const Filters = () => {
     dispatch(clearFiltersAction());
     setSearchParams({ page: 1 });
   };
-
 
   useEffect(() => {
     const minPriceParam = searchParams.get("minPrice") || "";

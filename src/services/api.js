@@ -141,7 +141,7 @@ export const fetchSingleProduct = async (id) => {
   }
 };
 
-export const deleteProduct = async (id) => {
+export const deleteProductApi = async (id, accessToken) => {
   try {
     const response = await axios.delete(`${BASE_URL}/product`, {
       data: {
@@ -153,13 +153,12 @@ export const deleteProduct = async (id) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Failed to delete real estate", error);
+    console.error("დაფიქსირდა შეცდომა", error);
     throw error;
   }
 };
 
 export const deleteCategoryApi = async (id, accessToken) => {
-  console.log( accessToken)
   try {
     const response = await axios.delete(`${BASE_URL}/product-category/${id}`, {
       headers: {

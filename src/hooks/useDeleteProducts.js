@@ -1,21 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
-import { deleteProduct } from "../services/apiInvoices";
+import { toast } from "react-toastify";
+import { deleteProductApi } from "../services/api";
 
-export const useDeleteProduct = () => {
+export const useDeleteCategory = () => {
   const queryClient = useQueryClient();
 
-  const { isLoading: isDeleting, mutate: deleteProd } = useMutation({
-    mutationFn: deleteProduct,
+  const { isLoading: isDeletingProduct, mutate: deleteProduct } = useMutation({
+    mutationFn: ({ id, accessToken }) => deleteProductApi(id, accessToken),
     onSuccess: () => {
-      toast.success("product successfully deleted");
-
-      queryClient.invalidateQueries({
-        queryKey: ["products"],
-      });
+      toast.info("კატეგორია წაიშალა");
+      queryClient.invalidateQueries(["productCategories"]);
     },
-    onError: (err) => toast.error(err.message),
+    onError: (err) => toast.error(err.message || "დაფიქსირდა შეცდომა"),
   });
 
-  return { isDeleting, deleteProd };
+  return { isDeletingProduct, deleteProduct };
 };

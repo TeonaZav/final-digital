@@ -30,10 +30,8 @@ const ProductForm = () => {
     (state) => state.userState?.loginData?.access_token
   );
 
-  // Hook to create a new product
   const { createNewProduct, isCreating } = useCreateProduct(accessToken);
 
-  // Retrieve form session data if available
   const sessionData = getSessionData(STORAGE_KEY);
   const formValues = sessionData || defaultValues;
 
@@ -45,10 +43,8 @@ const ProductForm = () => {
 
   const { handleSubmit, control, watch, reset, getValues } = methods;
 
-  // Hook to fetch categories
   const { categories } = useGetCategories();
 
-  // Persist form data to session storage on change
   useEffect(() => {
     const subscription = watch((values) =>
       persistFormDataToSession(values, STORAGE_KEY, "image")
@@ -56,7 +52,6 @@ const ProductForm = () => {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  // Reset form and clear session storage
   const handleReset = () => {
     setIsCanceled(true);
     setTimeout(() => setIsCanceled(false), 0);
@@ -64,22 +59,18 @@ const ProductForm = () => {
     sessionStorage.removeItem(STORAGE_KEY);
   };
 
-  // Form submission logic
   const onSubmit = async (data, event) => {
     event.preventDefault();
     event.stopPropagation();
 
     try {
-      // Convert image file to Base64
       const base64String = data.image ? await fileToBase64(data.image) : null;
 
-      // Prepare data payload
       const newData = {
         ...data,
         image: base64String,
       };
 
-      // Call the create product function
       createNewProduct(newData, {
         onSuccess: () => {
           sessionStorage.removeItem(STORAGE_KEY);
@@ -91,7 +82,6 @@ const ProductForm = () => {
     }
   };
 
-  // Handle form validation errors
   const onError = (errors) => {
     console.error("Form validation errors:", errors);
     console.log("Current form values:", getValues());
@@ -108,17 +98,20 @@ const ProductForm = () => {
             პროდუქტის დამატება
           </h2>
           <div className="flex flex-col gap-2">
-            {/* Category Selector */}
-            <FormRow {...productFormConfig["category_name"]}>
-              <SelectField
-                options={convertCategoryOptions(categories) || []}
-                fieldName="category_name"
-                useCustomMenu={true}
-                customModalContent={(props) => <CategoryForm {...props} />}
-              />
-            </FormRow>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormRow {...productFormConfig["category_name"]}>
+                <SelectField
+                  options={convertCategoryOptions(categories) || []}
+                  fieldName="category_name"
+                  useCustomMenu={true}
+                  customModalContent={(props) => <CategoryForm {...props} />}
+                />
+              </FormRow>
+              <FormRow {...productFormConfig["title"]}>
+                <Input fieldName="title" />
+              </FormRow>
+            </div>
 
-            {/* Price and Sale Price */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormRow {...productFormConfig["price"]}>
                 <Input fieldName="price" />
@@ -128,7 +121,6 @@ const ProductForm = () => {
               </FormRow>
             </div>
 
-            {/* Description and Image */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormRow {...productFormConfig["description"]}>
                 <Textarea fieldName="description" />
@@ -151,7 +143,6 @@ const ProductForm = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-4">
             <Button
               type="button"

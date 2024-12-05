@@ -22,8 +22,7 @@ export const fileToBase64 = (file) => {
     reader.onload = () => {
       const result = reader.result;
 
- 
-      const base64String = result.split(",")[1]; 
+      const base64String = result.split(",")[1];
       resolve(base64String);
     };
     reader.onerror = (error) => reject(error);
@@ -100,7 +99,7 @@ export const convertCategoryOptions = (data) => {
   if (!data) return;
 
   return data.map((el) => ({
-    value: el.id,
+    value: el.name,
     label: el.name,
   }));
 };

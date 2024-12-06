@@ -243,7 +243,7 @@ export const purchase = async (data, accessToken) => {
 
 export const refreshAuthToken = async ({ refresh_token }) => {
   try {
-    const response = await axios.post(`${BASE_URL}/update-tokens`, {
+    const response = await axios.post(`${BASE_URL}/auth/update-tokens`, {
       refresh_token,
     });
 

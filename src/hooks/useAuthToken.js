@@ -15,10 +15,10 @@ export const useAuthToken = () => {
     mutationFn: refreshAuthToken,
     onSuccess: (newTokenData) => {
       try {
-        const decodedToken = jwtDecode(newTokenData.access_token);
-        const expirationTime = decodedToken.exp * 1000;
+        const decodedToken = jwtDecode(newTokenData.access_token); 
+        const expirationTime = decodedToken.exp * 1000; 
 
-        if (expirationTime < Date.now()) {
+        if (expirationTime <= Date.now()) {
           throw new Error("Token is already expired");
         }
 
@@ -36,6 +36,7 @@ export const useAuthToken = () => {
           expirationTime,
         };
 
+    
         localStorage.setItem("loginData", JSON.stringify(authData));
         dispatch(loginUserAction(authData));
 
@@ -53,6 +54,7 @@ export const useAuthToken = () => {
       }
     },
     onError: () => {
+
       localStorage.removeItem("loginData");
       dispatch(logoutUser());
       toast.error("Session expired. Please log in again.");

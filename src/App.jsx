@@ -34,6 +34,7 @@ const App = () => {
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("loginData"));
+
     if (storedData?.refresh_token) {
       refreshToken({ refresh_token: storedData.refresh_token });
     }

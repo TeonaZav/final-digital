@@ -15,6 +15,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import GuestRoute from "./components/auth/GuestRoute";
 import AdminLayout from "./layouts/AdminLayout";
+import { useAuthToken } from "./hooks/useAuthToken";
 
 const Cart = React.lazy(() => import("./pages/user/Cart"));
 const Checkout = React.lazy(() => import("./pages/user/Checkout"));
@@ -29,10 +30,18 @@ const Dashboard = React.lazy(() => import("./pages/admin/Dashboard"));
 const Fallback = () => <LoadingSpinner />;
 
 const App = () => {
+  const { refreshToken } = useAuthToken();
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("loginData"));
+    if (storedData?.refresh_token) {
+      refreshToken({ refresh_token: storedData.refresh_token });
+    }
+  }, [refreshToken]);
+
   const accessToken = useSelector(
     (state) => state.userState?.loginData?.access_token
   );
-  console.log(accessToken);
   const { cart } = useFetchCart(accessToken);
   const dispatch = useDispatch();
 

@@ -44,7 +44,7 @@ const userSlice = createSlice({
       localStorage.removeItem("loginData");
       localStorage.removeItem("userDetails");
 
-      toast.success("Logged out successfully");
+      toast.info("Logged out");
     },
   },
 });

@@ -240,3 +240,16 @@ export const purchase = async (data, accessToken) => {
     console.error("Failed to purchase products", error);
   }
 };
+
+export const refreshAuthToken = async ({ refresh_token }) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/update-tokens`, {
+      refresh_token,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    throw new Error("Failed to refresh token. Please log in again.");
+  }
+};

@@ -1,41 +1,60 @@
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
-import { refreshAuthToken } from "../services/api"; 
-import { loginUser as loginUserAction } from "../features/user/userSlice";
+import { refreshAuthToken } from "../services/api";
+import {
+  loginUser as loginUserAction,
+  logoutUser,
+} from "../features/user/userSlice";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 
 export const useAuthToken = () => {
   const dispatch = useDispatch();
 
-  const { mutate: refreshToken } = useMutation(refreshAuthToken, {
+  const { mutate: refreshToken } = useMutation({
+    mutationFn: refreshAuthToken,
     onSuccess: (newTokenData) => {
-      const expiresIn = newTokenData.expires_in || 3600; 
-      const expirationTime = Date.now() + expiresIn * 1000;
+      try {
+        const decodedToken = jwtDecode(newTokenData.access_token);
+        const expirationTime = decodedToken.exp * 1000;
 
-      localStorage.setItem(
-        "loginData",
-        JSON.stringify({
+        if (expirationTime < Date.now()) {
+          throw new Error("Token is already expired");
+        }
+
+        const authData = {
+          user: {
+            id: decodedToken.id,
+            email: decodedToken.email,
+            first_name: decodedToken.first_name,
+            last_name: decodedToken.last_name,
+            phone_number: decodedToken.phone_number,
+            role: decodedToken.role,
+          },
           access_token: newTokenData.access_token,
           refresh_token: newTokenData.refresh_token,
           expirationTime,
-        })
-      );
+        };
 
-      dispatch(
-        loginUserAction({
-          token: newTokenData.access_token,
-          refreshToken: newTokenData.refresh_token,
-        })
-      );
+        localStorage.setItem("loginData", JSON.stringify(authData));
+        dispatch(loginUserAction(authData));
 
-
-      setTimeout(() => {
-        refreshToken(newTokenData.refresh_token);
-      }, (expiresIn - 60) * 1000); 
+        const refreshTimer = expirationTime - Date.now() - 60000;
+        if (refreshTimer > 0) {
+          setTimeout(() => {
+            refreshToken({ refresh_token: newTokenData.refresh_token });
+          }, refreshTimer);
+        }
+      } catch (error) {
+        console.error("Error processing new token:", error);
+        toast.error("Invalid or expired token. Please log in again.");
+        localStorage.removeItem("loginData");
+        dispatch(logoutUser());
+      }
     },
     onError: () => {
-   
       localStorage.removeItem("loginData");
-      dispatch(loginUserAction(null));
+      dispatch(logoutUser());
       toast.error("Session expired. Please log in again.");
     },
   });

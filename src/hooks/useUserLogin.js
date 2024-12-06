@@ -2,8 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
 import { loginUser as loginUserAPI } from "../services/api";
-import { loginUser as loginUserAction } from "../features/user/userSlice";
+import {
+  loginUser as loginUserAction,
+  logoutUser,
+} from "../features/user/userSlice";
 
 export const useUserLogin = () => {
   const dispatch = useDispatch();
@@ -12,33 +16,54 @@ export const useUserLogin = () => {
   const { mutate: login, isLoading: isLoggingIn } = useMutation({
     mutationFn: loginUserAPI,
     onSuccess: (loginData) => {
-      const expiresIn = loginData.expires_in || 3600;
-      const expirationTime = Date.now() + expiresIn * 1000;
+      try {
+     
+        const decodedToken = jwtDecode(loginData.access_token);
+        const expirationTime = decodedToken.exp * 1000;
 
-      const loginPayload = {
-        access_token: loginData.access_token,
-        refresh_token: loginData.refresh_token,
-        expirationTime,
-      };
+        if (!decodedToken.exp || expirationTime < Date.now()) {
+          throw new Error("Invalid or expired token");
+        }
 
-      localStorage.setItem("loginData", JSON.stringify(loginPayload));
-
-      dispatch(
-        loginUserAction({
+    
+        const authData = {
+          user: {
+            id: decodedToken.id,
+            email: decodedToken.email,
+            first_name: decodedToken.first_name,
+            last_name: decodedToken.last_name,
+            phone_number: decodedToken.phone_number,
+            role: decodedToken.role,
+          },
           access_token: loginData.access_token,
           refresh_token: loginData.refresh_token,
-        })
-      );
+          expirationTime,
+        };
 
-      setTimeout(() => {
+   
+        localStorage.setItem("loginData", JSON.stringify(authData));
+
+ 
+        dispatch(loginUserAction(authData));
+
+     
+        const logoutTimer = expirationTime - Date.now() - 60000; 
+        if (logoutTimer > 0) {
+          setTimeout(() => {
+            localStorage.removeItem("loginData");
+            dispatch(logoutUser());
+            toast.info("Session expired. Please log in again.");
+            navigate("/login");
+          }, logoutTimer);
+        }
+
+        toast.success("Logged in successfully");
+        navigate("/products"); 
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        toast.error("Invalid token received. Please try again.");
         localStorage.removeItem("loginData");
-        dispatch(logoutUser());
-        toast.info("Session expired. Please log in again.");
-        navigate("/login");
-      }, expiresIn * 1000);
-
-      toast.success("Logged in successfully");
-      navigate("/products");
+      }
     },
     onError: (error) => {
       const errorMessage =

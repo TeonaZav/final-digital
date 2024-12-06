@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useForm, FormProvider, Controller } from "react-hook-form";
-import { Button, Card } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCreateCategory } from "../../hooks/useCreateCategory";
 import { categoryValidationSchema } from "../../validation/schema";
@@ -38,9 +38,11 @@ const CategoryForm = () => {
     resolver: yupResolver(categoryValidationSchema),
   });
 
-  const { handleSubmit, control, watch, reset, getValues } = methods;
+  const { handleSubmit, control, watch, reset, getValues, clearErrors } =
+    methods;
 
   useEffect(() => {
+    if (isCanceled) return;
     const subscription = watch((values) => {
       persistFormDataToSession(values, STORAGE_KEY, "image");
     });
@@ -48,15 +50,15 @@ const CategoryForm = () => {
   }, [watch]);
 
   const handleCancel = () => {
+    setIsCanceled(true);
+    clearErrors();
     reset(defaultValues);
     sessionStorage.removeItem(STORAGE_KEY);
-    setIsCanceled(true);
     setTimeout(() => setIsCanceled(false), 0);
   };
 
   const onSubmit = async (data, event) => {
     event.preventDefault();
-    event.stopPropagation();
 
     const base64String = await fileToBase64(data.image);
 
@@ -85,7 +87,7 @@ const CategoryForm = () => {
           className="flex flex-col max-w-[400px] gap-4 bg-white p-7 rounded-lg"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
-          <h2 className="text-xl font-semibold leading-tight mb-16">
+          <h2 className="text-xl font-semibold leading-tight ">
             კატეგორიის დამატება
           </h2>
           <FormRow

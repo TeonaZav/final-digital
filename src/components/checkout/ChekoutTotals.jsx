@@ -74,7 +74,9 @@ const ChekoutTotals = ({ selectedPayment, cartItems }) => {
           className="bg-gray-300 w-full text-sm text-gray-700"
           onClick={handleCheckout}
         >
-          აირჩიეთ გადახდის მეთოდი
+          {!selectedPayment
+            ? "აირჩიეთ გადახდის მეთოდი"
+            : "შეკვეთის დადასტურება"}
         </Button>
       </CardBody>
     </Card>

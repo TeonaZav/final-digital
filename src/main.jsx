@@ -23,6 +23,6 @@ createRoot(document.getElementById("root")).render(
         <App />
       </PersistGate>
       <ToastContainer position="top-center" />
-    </Provider>{" "}
+    </Provider>
   </QueryClientProvider>
 );

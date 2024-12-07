@@ -1,19 +1,28 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateProduct } from "../services/apiInvoices";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
+import { updateProduct } from "../services/api";
 
-export const useEditProduct = (id = "") => {
+export const useEditProduct = (accessToken) => {
   const queryClient = useQueryClient();
 
-  const { mutate: editInvoice, isLoading: isEditing } = useMutation({
-    mutationFn: ({ changedData }) => updateProduct(changedData, id),
-    onSuccess: () => {
-      toast.success("Product successfully updated");
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      queryClient.invalidateQueries({ queryKey: ["products", id] });
+  const { mutate: editProduct, isLoading: isEditing } = useMutation({
+    mutationFn: ({ formData }) => updateProduct(formData, accessToken),
+    onSuccess: (updatedProduct) => {
+      queryClient.invalidateQueries(["products"]);
+      if (updatedProduct?.id) {
+        queryClient.invalidateQueries({
+          queryKey: ["products", updatedProduct.id],
+        });
+      }
+      toast.success("პროდუქტი წარმატებით დარედაქტირდა");
     },
-    onError: (err) => toast.error(err.message),
+    onError: (err) => {
+      const errorMessage =
+        err.message || "პროდუქტის დარედაქტირება ვერ მოხერხდა";
+      console.log(err);
+      toast.error(errorMessage);
+    },
   });
 
-  return { isEditing, editInvoice };
+  return { isEditing, editProduct };
 };

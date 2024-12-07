@@ -22,7 +22,7 @@ const ImageWithSkeleton = ({
     >
       <svg
         className="w-10 h-10 text-gray-200 dark:text-gray-600"
-        aria-hidden="true"
+        // aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
         viewBox="0 0 20 18"

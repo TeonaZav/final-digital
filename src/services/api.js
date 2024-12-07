@@ -72,6 +72,20 @@ export const createProduct = async (formData, accessToken) => {
   }
 };
 
+export const updateProduct = async (formData, accessToken) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/product`, formData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("პროდუქტის რედაქტირებისას დაფიქსირდა შეცდომა", error);
+  }
+};
+
 export const createCategory = async (formData, accessToken) => {
   try {
     const response = await axios.post(
@@ -159,7 +173,6 @@ export const deleteProductApi = async (id, accessToken) => {
 };
 
 export const deleteCategoryApi = async (id, accessToken) => {
-  console.log(id);
   try {
     const response = await axios.delete(`${BASE_URL}/product-category/${id}`, {
       headers: {
@@ -251,5 +264,41 @@ export const refreshAuthToken = async ({ refresh_token }) => {
   } catch (error) {
     console.error("Error refreshing token:", error);
     throw new Error("Failed to refresh token. Please log in again.");
+  }
+};
+
+export const fetchFavorites = async (accessToken) => {
+  const response = await axios.get(`${BASE_URL}/liked-products`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
+};
+
+export const addProductToFavorites = async (id, accessToken) => {
+  const response = await axios.post(
+    `${BASE_URL}/liked-products`,
+    { product_id: id },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const deleteFavoriteApi = async (id, accessToken) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/liked-products/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("დაფიქსირდა შეცდომა", error);
+    throw error;
   }
 };

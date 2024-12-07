@@ -12,6 +12,7 @@ import Textarea from "./Textarea";
 import Input from "./Input";
 import ImageUpload from "./ImageUpload";
 import SelectField from "./SelectField";
+import { useEditProduct } from "../../hooks/useEditProduct";
 
 import {
   convertCategoryOptions,
@@ -23,7 +24,12 @@ import { productFormConfig, defaultValues } from "./productFormConfig";
 import CategoryForm from "./CategoryForm";
 
 const STORAGE_KEY = "product-form-data";
-const ProductForm = () => {
+
+const ProductForm = ({
+  editingProductValues = null,
+  onSubmitSuccess,
+  closeDialogOnCancel,
+}) => {
   const [isCanceled, setIsCanceled] = useState(false);
 
   const accessToken = useSelector(
@@ -31,9 +37,10 @@ const ProductForm = () => {
   );
 
   const { createNewProduct, isCreating } = useCreateProduct(accessToken);
+  const { editProduct, isEditing } = useEditProduct(accessToken);
 
   const sessionData = getSessionData(STORAGE_KEY);
-  const formValues = sessionData || defaultValues;
+  const formValues = editingProductValues || sessionData || defaultValues;
 
   const methods = useForm({
     defaultValues: formValues,
@@ -55,6 +62,7 @@ const ProductForm = () => {
   const handleReset = () => {
     setIsCanceled(true);
     setTimeout(() => setIsCanceled(false), 0);
+    closeDialogOnCancel(true);
     reset(defaultValues);
     sessionStorage.removeItem(STORAGE_KEY);
   };
@@ -64,20 +72,41 @@ const ProductForm = () => {
     event.stopPropagation();
 
     try {
-      const base64String = data.image ? await fileToBase64(data.image) : null;
+      if (editingProductValues) {
+        editProduct(
+          {
+            formData: {
+              ...data,
+              image: editingProductValues.image?.split(",")[1] || "",
+              id: editingProductValues.id,
+            },
+          },
+          {
+            onSuccess: () => {
+              sessionStorage.removeItem(STORAGE_KEY);
+              handleReset();
+              if (onSubmitSuccess) onSubmitSuccess();
+            },
+          }
+        );
+      } else {
+        const base64String = data.image ? await fileToBase64(data.image) : null;
 
-      const newData = {
-        ...data,
-        image: base64String,
-      };
+        const newData = {
+          ...data,
+          image: base64String,
+        };
 
-      createNewProduct(newData, {
-        onSuccess: () => {
-          sessionStorage.removeItem(STORAGE_KEY);
-          handleReset();
-        },
-      });
+        createNewProduct(newData, {
+          onSuccess: () => {
+            sessionStorage.removeItem(STORAGE_KEY);
+            handleReset();
+            if (onSubmitSuccess) onSubmitSuccess();
+          },
+        });
+      }
     } catch (error) {
+      console.log(data);
       console.error("Error during form submission:", error);
     }
   };
@@ -95,7 +124,9 @@ const ProductForm = () => {
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <h2 className="text-xl font-semibold leading-tight mb-8">
-            პროდუქტის დამატება
+            {editingProductValues
+              ? "პროდუქტის რედაქტირება"
+              : "პროდუქტის დამატება"}
           </h2>
           <div className="flex flex-col gap-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -133,7 +164,7 @@ const ProductForm = () => {
                     <ImageUpload
                       fieldName="image"
                       onChange={onChange}
-                      value={value}
+                      value={value || editingProductValues?.image}
                       storageKey={STORAGE_KEY}
                       onCancel={isCanceled}
                     />
@@ -148,12 +179,16 @@ const ProductForm = () => {
               type="button"
               variant="outlined"
               onClick={handleReset}
-              disabled={isCreating}
+              disabled={isCreating || isEditing}
             >
               გაუქმება
             </Button>
-            <Button type="submit" variant="gradient" loading={isCreating}>
-              დამატება
+            <Button
+              type="submit"
+              variant="gradient"
+              loading={isCreating || isEditing}
+            >
+              {editingProductValues ? "რედაქტირება" : "დამატება"}
             </Button>
           </div>
         </form>
